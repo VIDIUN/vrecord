@@ -1,0 +1,84 @@
+VRecord flashvars
+=================
+debugmode, default:false, if any value set to true
+
+# base parameters
+#-----------------
+vs, REQUIRED
+pid, partner id, REQUIRED
+host, default: "www.vidiun.com"
+rtmphost, default: "rtmp://www.vidiun.com"
+httpprotocol, http protocol used for API calls. if not specified, the same protocol that was used to load VRecord.swf is used. values of format "https" (no slashes)
+
+
+# appearance
+#-----------------
+themeurl, default: locale.xml
+localeurl, default: skin.swf
+
+
+# device detection
+#-----------------
+detectiondelay, delay before initial camera test (allowing hardware to activate), the delay after a failed test is double. default: 0
+timePerMic, number of miliseconds to wait while looking for mic activity before moving to the next microphone, default: 20000.
+skipDetection, if "true" device detection is skipped and default devices are used. default: false
+
+
+# published video parameters
+#-----------------
+quality:int, 
+bw:int, 
+width:int, 
+height:int, 
+fps:Number, 
+gop:int=25, 
+bufferTime:Number=70
+
+ish264, encode video in h264 codec. default:false, if ("1" || "true") set to true
+h264profile, profile to use (values enumerated in http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/H264Profile.html) 
+h264level, level to use (values enumerated in http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/H264Level.html)
+
+soundCodec, sound codec to use, default is NellyMoser (values enumerated in http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/SoundCodec.html)
+soundRate, the audio sample rate measured in kilohertz (kHz), default 8. Higher sample rates increase sound quality but require more resources for transmission and storage. rates depend on selected codec; NellyMoser can do 5, 8, 11, 16, 22 and 44, speex can only do 16 Khz
+
+
+# record live streams (note - UI is not supported for live streams)
+#-----------------
+isLive, treat published stream as a live stream rather than recorded stream
+streamName, name for published live stream 
+
+
+# other parameters
+#-----------------
+showui, default: "false"
+showerrormessage, default: false, if ("true" || "1") set to true, 
+autopreview, default: "1"/ "true". any other value will set to false.
+showpreviewtimer, default: false, if ("true" || "1") set to true
+removeplayer, hides the ui controls of the preview player. default: false, if ("1" || "true") set to true
+limitrecord, automatically stop recording after limitrecord seconds. default: no limit (0), value given in seconds
+fmsapp, "oflaDemo"
+messagex, 0, x position of messages
+messagey, 0, y position of messages
+disableglobalclick, default:false, if ("1" || "true") set to true, and then you will not be able to start recording via flash UI!
+delegate, JS object that is used to delegate methods, this object should have methods corresponding to the VRecord "events".
+
+
+# entry data
+#-----------------
+entryname, the name for the new added entry. default: recorded_entry_pid_<partner_id><random number>
+entrytags, "", user tags for the newly created entry
+entrydescription, "", description of the newly created entry
+creditsscreenname, "", for anonymous user applications - the screen name of the user that contributed the entry (VidiunMediaEntry.creditUserName)
+creditssiteurl, "", for anonymous user applications - the website url of the user that contributed the entry (VidiunMediaEntry.creditUrl)
+categories, "", comma separated string of category full names. DO NOT use if entitlements are enabled for the account!
+admintags, "", admin tags for the newly created entry (VidiunBaseEntry.adminTags)
+licensetype, "", the content license type to use, values enumerated in VidiunLicenseType (this is arbitrary to be set by the partner)
+groupid, "", used to group multiple entries in a group (VidiunBaseEntry.groupId)
+partnerdata, "", specific data for partners to store (VidiunBaseEntry.partnerData)
+conversionQuality, "", conversion profile to be used with entry. if null, partner default profile is used
+
+
+subpid // NOT USED
+uid, Partner User id // NOT USED
+vshowid, "-1", vshow to associate the recordings to // NOT USED
+credit, "", custom partner credit field // NOT USED

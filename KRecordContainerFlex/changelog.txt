@@ -1,2 +1,0 @@
-Changed ApplicationLoader: stage to root
-mouse leave
