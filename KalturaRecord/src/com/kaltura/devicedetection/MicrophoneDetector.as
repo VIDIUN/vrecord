@@ -1,4 +1,4 @@
-package com.kaltura.devicedetection
+package com.vidiun.devicedetection
 {
 	import flash.events.EventDispatcher;
 	import flash.events.StatusEvent;
@@ -11,37 +11,37 @@ package com.kaltura.devicedetection
 	
 	/**
 	 *  dispatched to notify an active microphone device was detetceted.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.DETECTED_MICROPHONE
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.DETECTED_MICROPHONE
 	 */
-	[Event(name = "detectedMicrophone", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "detectedMicrophone", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 	
 	/**
 	 *  dispatched to notify an error of detecting an active microphone.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.ERROR_MICROPHONE
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.ERROR_MICROPHONE
 	 */
-	[Event(name = "errorMicrophone", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "errorMicrophone", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 	
 	
 	/**
 	 *  dispatched to notify microphone is denied by user.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.MIC_DENIED
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.MIC_DENIED
 	 */
-	[Event(name = "micDenied", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "micDenied", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 
 	
 	/**
 	 *  dispatched to notify microphone is allowed by user.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.MIC_ALLOWED
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.MIC_ALLOWED
 	 */
-	[Event(name = "micAllowed", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "micAllowed", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 
 	
 	/**
 	 *  dispatched to notify microphone detection steps
 	 *  event.detectedDevice is debug message
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.MIC_DEBUG
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.MIC_DEBUG
 	 */
-	[Event(name = "micDebug", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "micDebug", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 	
 	public class MicrophoneDetector extends EventDispatcher
 	{

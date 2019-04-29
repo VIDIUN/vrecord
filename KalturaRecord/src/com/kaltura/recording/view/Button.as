@@ -1,9 +1,9 @@
 // TODO: support label
 
-package com.kaltura.recording.view
+package com.vidiun.recording.view
 {
 
-import com.kaltura.utils.KMovieClipUtil;
+import com.vidiun.utils.VMovieClipUtil;
 
 import flash.display.MovieClip;
 import flash.events.Event;
@@ -50,7 +50,7 @@ public class Button extends UIComponent
 	{
 		if( _state != "over" )
 		{
-			if( KMovieClipUtil.hasLabel( _skin, "over" ))
+			if( VMovieClipUtil.hasLabel( _skin, "over" ))
 				_skin.gotoAndStop( "over" );
 			_state = "over";
 		}
@@ -60,7 +60,7 @@ public class Button extends UIComponent
 	{
 		if( _state != "up" )
 		{
-			if( KMovieClipUtil.hasLabel( _skin, "up" ))
+			if( VMovieClipUtil.hasLabel( _skin, "up" ))
 				_skin.gotoAndStop( "up" );
 			_state = "up";
 		}

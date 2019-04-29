@@ -1,10 +1,10 @@
-package com.kaltura.utils
+package com.vidiun.utils
 {
 	
 import flash.display.MovieClip;
 	
 
-public class KMovieClipUtil
+public class VMovieClipUtil
 {
 
 	static public function hasLabel( mc:MovieClip, label:String ):Boolean

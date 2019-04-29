@@ -1,4 +1,4 @@
-package com.kaltura.recording.controller
+package com.vidiun.recording.controller
 {
 	/**
 	 * Dummy class that catches server calls to avoid flash errors

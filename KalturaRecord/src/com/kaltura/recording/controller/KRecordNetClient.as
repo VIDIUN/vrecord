@@ -1,9 +1,9 @@
 /*
-This file is part of the Kaltura Collaborative Media Suite which allows users
+This file is part of the Vidiun Collaborative Media Suite which allows users
 to do with audio, video, and animation what Wiki platfroms allow them to do with
 text.
 
-Copyright (C) 2006-2008  Kaltura Inc.
+Copyright (C) 2006-2008  Vidiun Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 @ignore
 */
-package com.kaltura.recording.controller {
+package com.vidiun.recording.controller {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.NetStatusEvent;
@@ -49,7 +49,7 @@ package com.kaltura.recording.controller {
 	 */
 	[Event(name = "onLastSecond", type = "flash.events.Event")]
 
-	public dynamic class KRecordNetClient extends EventDispatcher {
+	public dynamic class VRecordNetClient extends EventDispatcher {
 		public static var ON_METADATA_BUFFER_SIZES:String = "OnMetaData.bufferSizes";
 		public static var ON_STREAM_END:String = "Stream.End";
 		public static var ON_STREAM_SWITCH:String = "Stream.Switch";
@@ -76,7 +76,7 @@ package com.kaltura.recording.controller {
 
 
 		
-		public function KRecordNetClient(ClientID:String = "") {
+		public function VRecordNetClient(ClientID:String = "") {
 			_ClientID = ClientID;
 		}
 		
@@ -85,7 +85,7 @@ package com.kaltura.recording.controller {
 
 		public function onMetaData(info:Object, ... args):void {
 			if (debugTraces) 
-				trace("KRecordNetClient: \nmetadata: \nduration=" + info.duration + "\nwidth=" + info.width + "\nheight=" + info.height + "\nframerate=" + info.framerate);
+				trace("VRecordNetClient: \nmetadata: \nduration=" + info.duration + "\nwidth=" + info.width + "\nheight=" + info.height + "\nframerate=" + info.framerate);
 			_metadata = new Object();
 			_metadata.duration = info.duration;
 			_metadata.width = info.width;
@@ -97,31 +97,31 @@ package com.kaltura.recording.controller {
 				_metadata.bufferSizes = info.bufferSizes;
 				if (_metadata.bufferSizes.length > 0) {
 					if (debugTraces)
-						trace("KRecordNetClient: there is bufferSizes object injected:\n" + _metadata.bufferSizes);
+						trace("VRecordNetClient: there is bufferSizes object injected:\n" + _metadata.bufferSizes);
 					dispatchEvent(new Event(ON_METADATA_BUFFER_SIZES));
 				}
 			}
 			catch (Err:Error) {
 				if (debugTraces)
-					trace("KRecordNetClient: MetaData Error, bufferSizes: " + Err.message);
+					trace("VRecordNetClient: MetaData Error, bufferSizes: " + Err.message);
 			}
 			try {
 				_metadata.keyframes.times = info.keyframes.times;
 				if (debugTraces)
-					trace("KRecordNetClient: there is keyframes.times object injected");
+					trace("VRecordNetClient: there is keyframes.times object injected");
 			}
 			catch (Err:Error) {
 				if (debugTraces)
-					trace("KRecordNetClient: MetaData Error, keyframes.times: " + Err.message);
+					trace("VRecordNetClient: MetaData Error, keyframes.times: " + Err.message);
 			}
 			try {
 				_metadata.keyframes.filepositions = info.keyframes.filepositions;
 				if (debugTraces)
-					trace("KRecordNetClient: there is keyframes.filepositions object injected");
+					trace("VRecordNetClient: there is keyframes.filepositions object injected");
 			}
 			catch (Err:Error) {
 				if (debugTraces)
-					trace("KRecordNetClient: MetaData Error, keyframes.filepositions: " + Err.message);
+					trace("VRecordNetClient: MetaData Error, keyframes.filepositions: " + Err.message);
 			}
 			if (!_dispatchedMetaData) {
 				dispatchEvent(new Event("ExtendedOnMetaData", true, false));
@@ -132,26 +132,26 @@ package com.kaltura.recording.controller {
 
 		public function onLastSecond(info:Object):void {
 			if (debugTraces)
-				trace("KRecordNetClient: Client dispatches ONLASTSECOND");
+				trace("VRecordNetClient: Client dispatches ONLASTSECOND");
 			dispatchEvent(new Event(ON_LAST_SECOND, true, false));
 		}
 
 
 		public function onCuePoint(info:Object):void {
 			if (debugTraces)
-				trace("KRecordNetClient: cuepoint: time=" + info.time + " name=" + info.name + " type=" + info.type);
+				trace("VRecordNetClient: cuepoint: time=" + info.time + " name=" + info.name + " type=" + info.type);
 		}
 
 
 		public function onPlayStatus(info:Object):void {
 			if (info.code == "NetStream.Play.Complete") {
 				if (debugTraces)
-					trace("KRecordNetClient: Play of the stream has completed!");
+					trace("VRecordNetClient: Play of the stream has completed!");
 				dispatchEvent(new Event(ON_STREAM_END, true, false));
 			}
 			else if (info.code == "NetStream.Play.Switch") {
 				if (debugTraces)
-					trace("KRecordNetClient: switched streams!");
+					trace("VRecordNetClient: switched streams!");
 				dispatchEvent(new Event(ON_STREAM_SWITCH, true, false));
 			}
 		}
@@ -159,18 +159,18 @@ package com.kaltura.recording.controller {
 
 		public function onBWDone(...args):void {
 			if (debugTraces)
-				trace("KRecordNetClient: onBWDone");
+				trace("VRecordNetClient: onBWDone");
 		}
 
 
 		public function onBWCheck(...args):void {
 			if (debugTraces)
-				trace("KRecordNetClient: onBWonBWCheck");
+				trace("VRecordNetClient: onBWonBWCheck");
 		}
 		
 		public function onTimeCoordInfo(...args):void {
 			if (debugTraces)
-				trace("KRecordNetClient: onTimeCoordInfo");
+				trace("VRecordNetClient: onTimeCoordInfo");
 		}
 
 

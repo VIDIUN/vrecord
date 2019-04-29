@@ -89,11 +89,11 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"allowScriptAccess","sameDomain",
 			"type", "application/x-shockwave-flash",
 						"flashvars",
-						"ks=YTM0NzNmNzFlNWIzZjExZTczNjBjYzVjY2UzNjE4MzZlMGUyMGZmMXw3Nzg5Ozc3ODk7MTI1NjIyODA1NTswOzEyNTYxNDE2NTUuODgyOTszOw==" + // kaltura seession, only valid for 24 hours, and should be created uniquely per user
+						"vs=YTM0NzNmNzFlNWIzZjExZTczNjBjYzVjY2UzNjE4MzZlMGUyMGZmMXw3Nzg5Ozc3ODk7MTI1NjIyODA1NTswOzEyNTYxNDE2NTUuODgyOTszOw==" + // vidiun seession, only valid for 24 hours, and should be created uniquely per user
 						"&uid=3" + // This is the user id on your end, we recommend using a different one for each submission for security reasons
 						"&partnerId=7789" + // this should be your partner id, please do not use this partner id for your implementation
 						"&subPId=778900" +  // this hsould be your sub partner id (it's the partner id * 100.
-						"&host=http://www.kaltura.com" +  // leave as is
+						"&host=http://www.vidiun.com" +  // leave as is
 						"&entryId=-2" + // leave as is
 						"&conversionProfile=5" +
 						"&maxUploads=1" + // leave as is
@@ -101,10 +101,10 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 						"&maxFileSize=1" +
 						"&maxTotalSize=10" +
 						"&uiConfId=1053662" +
-						"&host=http://www.kaltura.com"+ 
-						"&rtmp_host=rtmp://www.kaltura.com:1935"+
-						"&localeUrl=http://cdnakmi.kaltura.com/flash/krecord/v1.0.8/locale.xml"+
-						"&themeUrl=http://cdnakmi.kaltura.com/flash/krecord/v1.0.8/skin.swf"+
+						"&host=http://www.vidiun.com"+ 
+						"&rtmp_host=rtmp://www.vidiun.com:1935"+
+						"&localeUrl=http://cdnakmi.vidiun.com/flash/vrecord/v1.0.8/locale.xml"+
+						"&themeUrl=http://cdnakmi.vidiun.com/flash/vrecord/v1.0.8/skin.swf"+
 						"&jsDelegate=delegate",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);

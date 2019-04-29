@@ -5,11 +5,11 @@
 //                          | ' </ _` | |  _| || | '_/ _` |
 //                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 //
-// This file is part of the Kaltura Collaborative Media Suite which allows users
+// This file is part of the Vidiun Collaborative Media Suite which allows users
 // to do with audio, video, and animation what Wiki platfroms allow them to do with
 // text.
 //
-// Copyright (C) 2006-2008  Kaltura Inc.
+// Copyright (C) 2006-2008  Vidiun Inc.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@
 // @ignore
 // ===================================================================================================
 */
-package com.kaltura.recording.business
+package com.vidiun.recording.business
 {
 	public class BaseRecorderParams
 	{
@@ -50,7 +50,7 @@ package com.kaltura.recording.business
 
 		/**
 		 * Constructor.
-		 * @param _host						Kaltura api host.
+		 * @param _host						Vidiun api host.
 		 * @param rtmp_host					Streaming service for the recording.
 		 * @param recording_application		the name of the recording application on the streaming server.
 		 * @param is_live					if true, the outgoing stream will be treated as a live stream, not as a recorded stream.

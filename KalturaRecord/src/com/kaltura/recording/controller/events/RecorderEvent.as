@@ -5,11 +5,11 @@
 //                          | ' </ _` | |  _| || | '_/ _` |
 //                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 //
-// This file is part of the Kaltura Collaborative Media Suite which allows users
+// This file is part of the Vidiun Collaborative Media Suite which allows users
 // to do with audio, video, and animation what Wiki platfroms allow them to do with
 // text.
 //
-// Copyright (C) 2006-2008  Kaltura Inc.
+// Copyright (C) 2006-2008  Vidiun Inc.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@
 // @ignore
 // ===================================================================================================
 */
-package com.kaltura.recording.controller.events
+package com.vidiun.recording.controller.events
 {
 	import flash.events.Event;
 
@@ -52,23 +52,23 @@ package com.kaltura.recording.controller.events
 		public static const RECORD_COMPLETE : String = "recordComplete";
 		
 		/**
-		 * dispatched whenever KRecordControl.connecting is set to true
+		 * dispatched whenever VRecordControl.connecting is set to true
 		 */
 		public static const CONNECTING : String = "connecting";
 		
 		/**
-		 * dispatched whenever KRecordControl.connecting is set to false
+		 * dispatched whenever VRecordControl.connecting is set to false
 		 */
 		public static const CONNECTING_FINISH : String = "connectingFinish";
 		
 		/**
-		 * dispatched whenever KRecordControl.streamUid is changed
+		 * dispatched whenever VRecordControl.streamUid is changed
 		 * event.data is the new value
 		 */
 		public static const STREAM_ID_CHANGE : String = "streamIdChange";
 		
 		/**
-		 * dispatched whenever KRecordControl.recordedTime is changed 
+		 * dispatched whenever VRecordControl.recordedTime is changed 
 		 * event.data is the new value
 		 */
 		public static const UPDATE_RECORDED_TIME : String = "updateRecordedTime";

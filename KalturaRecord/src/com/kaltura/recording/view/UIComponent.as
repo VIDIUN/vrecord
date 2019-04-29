@@ -1,4 +1,4 @@
-package com.kaltura.recording.view
+package com.vidiun.recording.view
 {
 
 import flash.display.MovieClip;

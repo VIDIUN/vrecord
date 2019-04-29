@@ -1,4 +1,4 @@
-package com.kaltura.recording.view {
+package com.vidiun.recording.view {
 
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
@@ -50,7 +50,7 @@ package com.kaltura.recording.view {
 
 		private function loadLocale():void {
 			// First create defaults:
-			Global.LOCALE = new KRecordLocaleDefault();
+			Global.LOCALE = new VRecordLocaleDefault();
 
 			if (Global.DEBUG_MODE) 
 				trace('loading locale:', Global.VIEW_PARAMS.localeUrl);

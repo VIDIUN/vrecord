@@ -1,4 +1,4 @@
-package com.kaltura.recording.controller
+package com.vidiun.recording.controller
 {
 public interface IRecordControl
 {

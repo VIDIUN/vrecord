@@ -1,10 +1,10 @@
 <?php
 /*
-This file is part of the Kaltura Collaborative Media Suite which allows users
+This file is part of the Vidiun Collaborative Media Suite which allows users
 to do with audio, video, and animation what Wiki platfroms allow them to do with
 text.
 
-Copyright (C) 2006-2008 Kaltura Inc.
+Copyright (C) 2006-2008 Vidiun Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -20,22 +20,22 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class KalturaClientBase 
+class VidiunClientBase 
 {
-	const KALTURA_API_VERSION = "0.7";
-	const KALTURA_SERVICE_FORMAT_JSON = 1;
-	const KALTURA_SERVICE_FORMAT_XML  = 2;
-	const KALTURA_SERVICE_FORMAT_PHP  = 3;
+	const VIDIUN_API_VERSION = "0.7";
+	const VIDIUN_SERVICE_FORMAT_JSON = 1;
+	const VIDIUN_SERVICE_FORMAT_XML  = 2;
+	const VIDIUN_SERVICE_FORMAT_PHP  = 3;
 
 	/**
-	 * @var KalturaConfiguration
+	 * @var VidiunConfiguration
 	 */
 	private $config;
 	
 	/**
 	 * @var string
 	 */
-	private $ks;
+	private $vs;
 	
 	/**
 	 * @var boolean
@@ -43,36 +43,36 @@ class KalturaClientBase
 	private $shouldLog = false;
 	
 	/**
-	 * Kaltura client constuctor, expecting configuration object 
+	 * Vidiun client constuctor, expecting configuration object 
 	 *
-	 * @param KalturaConfiguration $config
+	 * @param VidiunConfiguration $config
 	 */
-	public function __construct(KalturaConfiguration $config)
+	public function __construct(VidiunConfiguration $config)
 	{
 		$this->config = $config;
 		
 		$logger = $this->config->getLogger();
-		if ($logger instanceof IKalturaLogger)
+		if ($logger instanceof IVidiunLogger)
 		{
 			$this->shouldLog = true;	
 		}
 	}
 		
-	public function hit($method, KalturaSessionUser $session_user, $params)
+	public function hit($method, VidiunSessionUser $session_user, $params)
 	{
 		$start_time = microtime(true);
 		
 		$this->log("service url: [" . $this->config->serviceUrl . "]");
-		$this->log("trying to call method: [" . $method . "] for user id: [" . $session_user->userId . "] using session: [" .$this->ks . "]");
+		$this->log("trying to call method: [" . $method . "] for user id: [" . $session_user->userId . "] using session: [" .$this->vs . "]");
 		
 		// append the basic params
-		$params["kaltura_api_version"] 	= self::KALTURA_API_VERSION;
+		$params["vidiun_api_version"] 	= self::VIDIUN_API_VERSION;
 		$params["partner_id"] 			= $this->config->partnerId;
 		$params["subp_id"] 				= $this->config->subPartnerId;
 		$params["format"] 				= $this->config->format;
 		$params["uid"] 					= $session_user->userId;
 		$this->addOptionalParam($params, "user_name", $session_user->screenName);
-		$this->addOptionalParam($params, "ks", $this->ks);
+		$this->addOptionalParam($params, "vs", $this->vs);
 		
 		$url = $this->config->serviceUrl . "/index.php/partnerservices2/" . $method;
 		$this->log("full reqeust url: [" . $url . "]");
@@ -85,7 +85,7 @@ class KalturaClientBase
 		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 		
 		$signature = $this->signature($params);
-		$params["kalsig"] = $signature;
+		$params["vidsig"] = $signature;
 		
 		$curl_result = curl_exec($ch);
 		
@@ -100,7 +100,7 @@ class KalturaClientBase
 		{
 			$this->log("result (serialized): " . $curl_result);
 			
-			if ($this->config->format == self::KALTURA_SERVICE_FORMAT_PHP)
+			if ($this->config->format == self::VIDIUN_SERVICE_FORMAT_PHP)
 			{
 				$result = @unserialize($curl_result);
 
@@ -125,17 +125,17 @@ class KalturaClientBase
 		return $result;
 	}
 
-	public function start(KalturaSessionUser $session_user, $secret, $admin = null, $privileges = null, $expiry = 86400)
+	public function start(VidiunSessionUser $session_user, $secret, $admin = null, $privileges = null, $expiry = 86400)
 	{
 		$result = $this->startsession($session_user, $secret, $admin, $privileges, $expiry);
 
-		$this->ks = @$result["result"]["ks"];
+		$this->vs = @$result["result"]["vs"];
 		return $result;
 	}
 	
 	private function signature($params)
 	{
-		ksort($params);
+		vsort($params);
 		$str = "";
 		foreach ($params as $k => $v)
 		{
@@ -144,14 +144,14 @@ class KalturaClientBase
 		return md5($str);
 	}
 		
-	public function getKs()
+	public function getVs()
 	{
-		return $this->ks;
+		return $this->vs;
 	}
 	
-	public function setKs($ks)
+	public function setVs($vs)
 	{
-		$this->ks = $ks;
+		$this->vs = $vs;
 	}
 	
 	protected function addOptionalParam(&$params, $paramName, $paramValue)
@@ -169,23 +169,23 @@ class KalturaClientBase
 	}
 }
 
-class KalturaSessionUser
+class VidiunSessionUser
 {
 	var $userId;
 	var $screenName;
 }
 
-class KalturaConfiguration
+class VidiunConfiguration
 {
 	private $logger;
 
-	public $serviceUrl    = "http://www.kaltura.com";
-	public $format        = KalturaClient::KALTURA_SERVICE_FORMAT_PHP;
+	public $serviceUrl    = "http://www.vidiun.com";
+	public $format        = VidiunClient::VIDIUN_SERVICE_FORMAT_PHP;
 	public $partnerId     = null;
 	public $subPartnerId  = null;
 	
 	/**
-	 * Constructs new kaltura configuration object, expecting partner id & sub partner id
+	 * Constructs new vidiun configuration object, expecting partner id & sub partner id
 	 *
 	 * @param int $partnerId
 	 * @param int $subPartnerId
@@ -197,11 +197,11 @@ class KalturaConfiguration
 	}
 	
 	/**
-	 * Set logger to get kaltura client debug logs
+	 * Set logger to get vidiun client debug logs
 	 *
-	 * @param IKalturaLogger $log
+	 * @param IVidiunLogger $log
 	 */
-	public function setLogger(IKalturaLogger $log)
+	public function setLogger(IVidiunLogger $log)
 	{
 		$this->logger = $log;
 	}
@@ -218,10 +218,10 @@ class KalturaConfiguration
 }
 
 /**
- * Implement to get kaltura client logs
+ * Implement to get vidiun client logs
  *
  */
-interface IKalturaLogger 
+interface IVidiunLogger 
 {
 	function log($msg); 
 }

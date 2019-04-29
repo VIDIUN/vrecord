@@ -10,13 +10,13 @@ package {
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
 
-	public class KRecordContainerFlash extends Sprite
+	public class VRecordContainerFlash extends Sprite
 	{
-		private var _kRecorderLoader:Loader = new Loader();
+		private var _vRecorderLoader:Loader = new Loader();
 
 		private var button:Sprite = new Sprite();
 
-		public function KRecordContainerFlash()
+		public function VRecordContainerFlash()
 		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
@@ -34,48 +34,48 @@ package {
 			button.addEventListener(MouseEvent.CLICK, buttonClickHandler);
 			addChild(button);
 
-			_kRecorderLoader.x = 100;
-			_kRecorderLoader.y = 100;
-			_kRecorderLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, finishedLoading);
-			_kRecorderLoader.load(new URLRequest("KRecord.swf"), new LoaderContext(true, ApplicationDomain.currentDomain));
+			_vRecorderLoader.x = 100;
+			_vRecorderLoader.y = 100;
+			_vRecorderLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, finishedLoading);
+			_vRecorderLoader.load(new URLRequest("VRecord.swf"), new LoaderContext(true, ApplicationDomain.currentDomain));
 		}
 
 		private function finishedLoading(event:Event):void
 		{
-			//wait for the krecord view to load -
-			_kRecorderLoader.addEventListener("viewReady", krecordReady);
-			//when loading inside another flash application, to pass initialization parameters to the krecord application, use the parameters object
+			//wait for the vrecord view to load -
+			_vRecorderLoader.addEventListener("viewReady", vrecordReady);
+			//when loading inside another flash application, to pass initialization parameters to the vrecord application, use the parameters object
 			//if loaded through HTML directly, the initialization will be directed through the embed object flashVars.
-			_kRecorderLoader.content['parameters'] = {themeUrl:"skin.swf",
+			_vRecorderLoader.content['parameters'] = {themeUrl:"skin.swf",
 														localeUrl:"locale.xml",
 														autoPreview:"1",
 														pid:"1",
 														subpid:"100",
-														ks:"some generated ks here..." };
-			//_kRecorderLoader.content['parameters'] = root.loaderInfo.parameters;
-			addChild(_kRecorderLoader);
+														vs:"some generated vs here..." };
+			//_vRecorderLoader.content['parameters'] = root.loaderInfo.parameters;
+			addChild(_vRecorderLoader);
 		}
 
-		private function krecordReady (event:Event):void
+		private function vrecordReady (event:Event):void
 		{
-			//when krecord view is ready, it can be resized
-			_kRecorderLoader.width = 100 + Math.random() * 200;
-			_kRecorderLoader.height = _kRecorderLoader.width * 0.75;
+			//when vrecord view is ready, it can be resized
+			_vRecorderLoader.width = 100 + Math.random() * 200;
+			_vRecorderLoader.height = _vRecorderLoader.width * 0.75;
 
-			//when krecord application is ready, it can be accessed for APIs
-			//to access krecord application, use the application property:
-			trace("Available microphones: " + _kRecorderLoader.content["application"].getMicrophones());
-			(_kRecorderLoader.content["application"] as EventDispatcher).addEventListener("addEntryFault", addEntryFaultHandler);
+			//when vrecord application is ready, it can be accessed for APIs
+			//to access vrecord application, use the application property:
+			trace("Available microphones: " + _vRecorderLoader.content["application"].getMicrophones());
+			(_vRecorderLoader.content["application"] as EventDispatcher).addEventListener("addEntryFault", addEntryFaultHandler);
 		}
 
 		private function addEntryFaultHandler (event:Event):void {
-			trace ("can't save without KS...");
+			trace ("can't save without VS...");
 		}
 
 		private function buttonClickHandler (event:MouseEvent):void
 		{
-			_kRecorderLoader.width = 100 + Math.random() * 600;
-			_kRecorderLoader.height = _kRecorderLoader.width * 0.75;
+			_vRecorderLoader.width = 100 + Math.random() * 600;
+			_vRecorderLoader.height = _vRecorderLoader.width * 0.75;
 		}
 	}
 }

@@ -1,9 +1,9 @@
 package
 {
-	import com.kaltura.utils.Locale;
+	import com.vidiun.utils.Locale;
 	
 
-	public class KRecordLocaleDefault extends Locale
+	public class VRecordLocaleDefault extends Locale
 	{
 		private var _defaults:XML = 
 		
@@ -58,7 +58,7 @@ package
 		
 		
 		
-		public function KRecordLocaleDefault()
+		public function VRecordLocaleDefault()
 		{
 			super(_defaults);
 		}

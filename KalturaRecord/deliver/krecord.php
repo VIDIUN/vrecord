@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <?php
-require_once("kaltura_client.php");
+require_once("vidiun_client.php");
 
 // Design params:
 $recorder_width = 400;
@@ -13,25 +13,25 @@ $uid = "your_user_id(whatever)";
 $uname = "your_user_name(whatever)";
 $pid = "your_partner_id";
 $spid = "your_sub_partner_id";
-$secret = "secret_key_given_kaltura_on_partner_registration";
-$host = "www.kaltura.com";
-$cdnHost = "cdn.kaltura.com";
-$uiconfId = "krecord_uiconf_id";
+$secret = "secret_key_given_vidiun_on_partner_registration";
+$host = "www.vidiun.com";
+$cdnHost = "cdn.vidiun.com";
+$uiconfId = "vrecord_uiconf_id";
 
-$config = new KalturaConfiguration($pid, $spid);
+$config = new VidiunConfiguration($pid, $spid);
 
 $config->serviceUrl = $host;
-$client = new KalturaClient($config);
+$client = new VidiunClient($config);
 
-$user = new KalturaSessionUser();
+$user = new VidiunSessionUser();
 $user->userId = $uid;
 $user->screenName = $uname;
 
 $result = $client->startSession($user, $secret, false, "edit:*");
-$ks = @$result["result"]["ks"];
+$vs = @$result["result"]["vs"];
 
 ?>
-	<title>KRecord - Kaltura Chromeless Recorder - JS Example</title>
+	<title>VRecord - Vidiun Chromeless Recorder - JS Example</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.1/swfobject.js"></script>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
@@ -39,7 +39,7 @@ $ks = @$result["result"]["ks"];
 
 <body>
 	
-	<div id="krecorder">This is where the KRecord will be embedded.</div>
+	<div id="vrecorder">This is where the VRecord will be embedded.</div>
 	<div>
 		<form>
 			<fieldset style="display: block; width: 300px; margin: 10px; padding: 1em; font: 80%/1 sans-serif;">
@@ -77,7 +77,7 @@ $ks = @$result["result"]["ks"];
 					writeToLog ('your newly created entry id is: ' + entryId + 
 							'<br />You can access the new entry at:' + 
 							'<input type="text" style="width:300px;" value="' +
-							'http://<?php echo $host ?>/api_v3/index.php/clientTag/krecord+sample+page/service/baseEntry/action/get/ks/<?php echo $ks ?>/entryId/' + entryId + '" />' + 
+							'http://<?php echo $host ?>/api_v3/index.php/clientTag/vrecord+sample+page/service/baseEntry/action/get/vs/<?php echo $vs ?>/entryId/' + entryId + '" />' + 
 							'<br />new entry thumbnail: <img src="' + thumbnailUrl + '" />', false);
 				},
 				
@@ -131,10 +131,10 @@ $ks = @$result["result"]["ks"];
 	
 	<script type="text/javascript">
 	    if (swfobject.hasFlashPlayerVersion("9.0.0")) {
-	    	var movieUrl = "http://<?php echo($host); ?>/krecord/ui_conf_id/<?php echo($uiconfId); ?>";
+	    	var movieUrl = "http://<?php echo($host); ?>/vrecord/ui_conf_id/<?php echo($uiconfId); ?>";
 	      	var fn = function() {
-		        var id = "krecorder";
-		        var att = { name:"krecorder",
+		        var id = "vrecorder";
+		        var att = { name:"vrecorder",
 							data:movieUrl, 
 							width:"<?php echo($recorder_width); ?>", 
 							height:"<?php echo($recorder_height); ?>",
@@ -142,7 +142,7 @@ $ks = @$result["result"]["ks"];
 						};
 		        var par = { flashvars:
 								"pid=<?php echo($pid); ?>" +
-								"&ks=<?php echo($ks); ?>" +
+								"&vs=<?php echo($vs); ?>" +
 								"&autoPreview=false" +
 								"&delegate=myDelegate" +
 			        			"&host=<?php echo($host); ?>",
@@ -181,7 +181,7 @@ $ks = @$result["result"]["ks"];
 			var vidW = $('#videoWidth').val();
 			var vidH = $('#videoHeight').val();
 			var vidFPS = $('#videoFPS').val();
-			$('#krecorder').get(0).setQuality (vidQ, vidBW, vidW, vidH, vidFPS);
+			$('#vrecorder').get(0).setQuality (vidQ, vidBW, vidW, vidH, vidFPS);
 		}
 
 	</script>

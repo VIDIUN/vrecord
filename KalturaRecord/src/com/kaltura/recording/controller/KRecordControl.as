@@ -5,11 +5,11 @@
 //                          | ' </ _` | |  _| || | '_/ _` |
 //                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 //
-// This file is part of the Kaltura Collaborative Media Suite which allows users
+// This file is part of the Vidiun Collaborative Media Suite which allows users
 // to do with audio, video, and animation what Wiki platfroms allow them to do with
 // text.
 //
-// Copyright (C) 2006-2008  Kaltura Inc.
+// Copyright (C) 2006-2008  Vidiun Inc.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -27,24 +27,24 @@
 // @ignore
 // ===================================================================================================
 */
-package com.kaltura.recording.controller {
+package com.vidiun.recording.controller {
 	// http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/events/NetStatusEvent.html#info
 	
-	import com.kaltura.KalturaClient;
-	import com.kaltura.commands.media.MediaAddFromRecordedWebcam;
-	import com.kaltura.devicedetection.DeviceDetectionEvent;
-	import com.kaltura.devicedetection.DeviceDetector;
-	import com.kaltura.events.KalturaEvent;
-	import com.kaltura.net.streaming.RecordNetStream;
-	import com.kaltura.net.streaming.events.ExNetConnectionEvent;
-	import com.kaltura.net.streaming.events.FlushStreamEvent;
-	import com.kaltura.net.streaming.events.RecordNetStreamEvent;
-	import com.kaltura.recording.business.BaseRecorderParams;
-	import com.kaltura.recording.controller.events.AddEntryEvent;
-	import com.kaltura.recording.controller.events.PreviewEvent;
-	import com.kaltura.recording.controller.events.RecorderEvent;
-	import com.kaltura.utils.ConnectionTester;
-	import com.kaltura.vo.KalturaMediaEntry;
+	import com.vidiun.VidiunClient;
+	import com.vidiun.commands.media.MediaAddFromRecordedWebcam;
+	import com.vidiun.devicedetection.DeviceDetectionEvent;
+	import com.vidiun.devicedetection.DeviceDetector;
+	import com.vidiun.events.VidiunEvent;
+	import com.vidiun.net.streaming.RecordNetStream;
+	import com.vidiun.net.streaming.events.ExNetConnectionEvent;
+	import com.vidiun.net.streaming.events.FlushStreamEvent;
+	import com.vidiun.net.streaming.events.RecordNetStreamEvent;
+	import com.vidiun.recording.business.BaseRecorderParams;
+	import com.vidiun.recording.controller.events.AddEntryEvent;
+	import com.vidiun.recording.controller.events.PreviewEvent;
+	import com.vidiun.recording.controller.events.RecorderEvent;
+	import com.vidiun.utils.ConnectionTester;
+	import com.vidiun.vo.VidiunMediaEntry;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -66,68 +66,68 @@ package com.kaltura.recording.controller {
 	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
 
-	[Event(name = "detectedMicrophone", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
-	[Event(name = "detectedCamera", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
-	[Event(name = "errorMicrophone", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
-	[Event(name = "errorCamera", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "detectedMicrophone", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "detectedCamera", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "errorMicrophone", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "errorCamera", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 	
-	[Event(name = "netconnectionConnectClosed", type = "com.kaltura.net.streaming.events.ExNetConnectionEvent")]
-	[Event(name = "netconnectionConnectFailed", type = "com.kaltura.net.streaming.events.ExNetConnectionEvent")]
-	[Event(name = "netconnectionConnectSuccess", type = "com.kaltura.net.streaming.events.ExNetConnectionEvent")]
-	[Event(name = "netconnectionConnectRejected", type = "com.kaltura.net.streaming.events.ExNetConnectionEvent")]
-	[Event(name = "netconnectionConnectInvalidapp", type = "com.kaltura.net.streaming.events.ExNetConnectionEvent")]
+	[Event(name = "netconnectionConnectClosed", type = "com.vidiun.net.streaming.events.ExNetConnectionEvent")]
+	[Event(name = "netconnectionConnectFailed", type = "com.vidiun.net.streaming.events.ExNetConnectionEvent")]
+	[Event(name = "netconnectionConnectSuccess", type = "com.vidiun.net.streaming.events.ExNetConnectionEvent")]
+	[Event(name = "netconnectionConnectRejected", type = "com.vidiun.net.streaming.events.ExNetConnectionEvent")]
+	[Event(name = "netconnectionConnectInvalidapp", type = "com.vidiun.net.streaming.events.ExNetConnectionEvent")]
 	
-	[Event(name = "netstreamRecordStart", type = "com.kaltura.net.streaming.events.RecordNetStreamEvent")]
-	[Event(name = "netstreamPlayStop", type = "com.kaltura.net.streaming.events.RecordNetStreamEvent")]
+	[Event(name = "netstreamRecordStart", type = "com.vidiun.net.streaming.events.RecordNetStreamEvent")]
+	[Event(name = "netstreamPlayStop", type = "com.vidiun.net.streaming.events.RecordNetStreamEvent")]
 	
-	[Event(name = "flushComplete", type = "com.kaltura.net.streaming.events.FlushStreamEvent")]
+	[Event(name = "flushComplete", type = "com.vidiun.net.streaming.events.FlushStreamEvent")]
 	
-	[Event(name = "addEntryResult", type = "com.kaltura.recording.controller.events.AddEntryEvent")]
-	[Event(name = "addEntryFault", type = "com.kaltura.recording.controller.events.AddEntryEvent")]
+	[Event(name = "addEntryResult", type = "com.vidiun.recording.controller.events.AddEntryEvent")]
+	[Event(name = "addEntryFault", type = "com.vidiun.recording.controller.events.AddEntryEvent")]
 	
 	/**
 	 * dispatched when the record stream's buffer is empty after recording has stopped
 	 * */
-	[Event(name = "recordComplete", type = "com.kaltura.recording.controller.events.RecorderEvent")]
+	[Event(name = "recordComplete", type = "com.vidiun.recording.controller.events.RecorderEvent")]
 	
 	/**
 	 * dispatched when the preview stream starts playing
 	 * */
-	[Event(name = "previewStarted", type = "com.kaltura.recording.controller.events.PreviewEvent")]
+	[Event(name = "previewStarted", type = "com.vidiun.recording.controller.events.PreviewEvent")]
 	
 	/**
 	 * dispatched when the preview stream stops playing
 	 * */
-	[Event(name = "previewStopped", type = "com.kaltura.recording.controller.events.PreviewEvent")]
+	[Event(name = "previewStopped", type = "com.vidiun.recording.controller.events.PreviewEvent")]
 	
 	/**
 	 * dispatched when the preview stream is paused
 	 * */
-	[Event(name = "previewPaused", type = "com.kaltura.recording.controller.events.PreviewEvent")]
+	[Event(name = "previewPaused", type = "com.vidiun.recording.controller.events.PreviewEvent")]
 	
 	/**
 	 * dispatched when the preview stream resumes playing
 	 * */
-	[Event(name = "previewResumed", type = "com.kaltura.recording.controller.events.PreviewEvent")]
+	[Event(name = "previewResumed", type = "com.vidiun.recording.controller.events.PreviewEvent")]
 	
 	
 	
 	/**
-	 * KRECORDER - Flash Video and Audio Recording and Contributing Application.
+	 * VRECORDER - Flash Video and Audio Recording and Contributing Application.
 	 * <p>Goals:
 	 *	1. Simplified Media Device Detection (Active Camera and Microphone).
 	 *	2. Simplified Media Selection Interface (Functions for manually choosing devices from available devices array).
 	 *	3. Server Connection and Error Handling.
 	 *	4. Video and Audio Recording on Red5, Handling of internal NetStream Events and Errors.
 	 *	5. Preview Mechanism - Live Preview using RTMP (Before addentry).
-	 *	6. Simplified addentry function to Kaltura Network Servers.
+	 *	6. Simplified addentry function to Vidiun Network Servers.
 	 *	7. Full JavaScript interaction layer.
 	 *	8. Dispatching of Events by Single Object to simplify Development of Recording Applications.</p>
-	 * KRecorder does NOT provide any visual elements beyond a native flash video component attached to the recording NetStream.
+	 * VRecorder does NOT provide any visual elements beyond a native flash video component attached to the recording NetStream.
 	 *</p>
 	 * @author Zohar Babin
 	 */
-	public class KRecordControl extends EventDispatcher implements IRecordControl {
+	public class VRecordControl extends EventDispatcher implements IRecordControl {
 
 		private const EXPANDED_BUFFER_LENGTH:int = 15;
 		private const START_BUFFER_LENGTH:int = 2;
@@ -667,7 +667,7 @@ package com.kaltura.recording.controller {
 			}
 			var exEvent:ExNetConnectionEvent = new ExNetConnectionEvent(exEventType, null, event.info)
 			isConnected = false;
-			trace("KRecordControl: can't connect to streaming server, " + ObjectUtil.toString(exEvent.connectionInfo));
+			trace("VRecordControl: can't connect to streaming server, " + ObjectUtil.toString(exEvent.connectionInfo));
 			dispatchEvent(exEvent);
 		}
 
@@ -680,7 +680,7 @@ package com.kaltura.recording.controller {
 				_recordStream.removeEventListener(NetStatusEvent.NET_STATUS, onRecordNetStatus);
 			}
 			_recordStream = new NetStream(_connection);
-			_recordStream.client = new KRecordNetClient();
+			_recordStream.client = new VRecordNetClient();
 			_recordStream.addEventListener(NetStatusEvent.NET_STATUS, onRecordNetStatus);
 			_recordStream.bufferTime = MAX_BUFFER_LENGTH;
 
@@ -701,7 +701,7 @@ package com.kaltura.recording.controller {
 
 			// Create the playBack Stream
 			_previewStream = new NetStream(_connection);
-			_previewStream.client = new KRecordNetClient();
+			_previewStream.client = new VRecordNetClient();
 			_previewStream.addEventListener(NetStatusEvent.NET_STATUS, onPreviewNetStatus);
 			_connectionTester = new ConnectionTester(_previewStream, 1500);
 			_connectionTester.addEventListener(ConnectionTester.SUCCESS, handlePreviewConnectionTest);
@@ -723,7 +723,7 @@ package com.kaltura.recording.controller {
 		
 		private function onRecordNetStatus(evt:NetStatusEvent):void {
 			if (debugTrace) 
-				trace(new Date(), "KRecordControl: Record NetStatusEvent: " + evt.info.code);
+				trace(new Date(), "VRecordControl: Record NetStatusEvent: " + evt.info.code);
 			switch (evt.info.code) {
 				case "NetStream.Buffer.Flush":
 					var flushEvent:FlushStreamEvent = new FlushStreamEvent(FlushStreamEvent.FLUSH_COMPLETE, 0, 0);
@@ -741,7 +741,7 @@ package com.kaltura.recording.controller {
 		 */
 		protected function onNetConnectionStatus(event:NetStatusEvent):void {
 			if (debugTrace) 
-				trace(new Date(), "KRecordControl: NetConnectionStatus: " + event.info.code);
+				trace(new Date(), "VRecordControl: NetConnectionStatus: " + event.info.code);
 			switch (event.info.code) {
 				case "NetConnection.Connect.Success":
 					connectionSuccess(event);
@@ -764,7 +764,7 @@ package com.kaltura.recording.controller {
 		 */
 		private function onPreviewNetStatus(event:NetStatusEvent):void {
 			if (debugTrace) 
-				trace(new Date(), "KRecordControl: Preview NetStatusEvent: " + event.info.code);
+				trace(new Date(), "VRecordControl: Preview NetStatusEvent: " + event.info.code);
 
 			switch (event.info.code) {
 				case "NetStream.Play.Start":
@@ -828,7 +828,7 @@ package com.kaltura.recording.controller {
 
 		private function notifyPreviewEnd():void {
 			if (debugTrace) 
-				trace(new Date(), "KRecordControl: notifyPreviewEnd");
+				trace(new Date(), "VRecordControl: notifyPreviewEnd");
 			var evt:RecordNetStreamEvent = new RecordNetStreamEvent(RecordNetStreamEvent.NETSTREAM_PLAY_COMPLETE);
 			dispatchEvent(evt);
 		}
@@ -839,7 +839,7 @@ package com.kaltura.recording.controller {
 		 */
 		protected function recordStarted():void {
 			if (debugTrace) 
-				trace(new Date(), "KRecordControl: recordStarted");
+				trace(new Date(), "VRecordControl: recordStarted");
 			connecting = false;
 			var recordNetStreamEvt:RecordNetStreamEvent = new RecordNetStreamEvent(RecordNetStreamEvent.NETSTREAM_RECORD_START);
 			dispatchEvent(recordNetStreamEvt);
@@ -879,7 +879,7 @@ package com.kaltura.recording.controller {
 				
 				
 				if (debugTrace) 
-					trace(new Date(), "KRecordControl: publishing: " + _streamUid);
+					trace(new Date(), "VRecordControl: publishing: " + _streamUid);
 				connecting = true; //setting loader until the Record.Start is called
 				
 				var metaData:Object = new Object();
@@ -928,7 +928,7 @@ package com.kaltura.recording.controller {
 		 * */
 		private function checkRecordBufferFlushed():void {
 			if (debugTrace) 
-				trace("KRecordControl: buffer: ", _recordStream.bufferLength);
+				trace("VRecordControl: buffer: ", _recordStream.bufferLength);
 			
 			if (_recordStream.bufferLength <= 0) {
 				clearInterval(_recordBufferEmptyInterval);
@@ -963,7 +963,7 @@ package com.kaltura.recording.controller {
 				connecting = true;
 				video.attachNetStream(_previewStream);
 				if (debugTrace) 
-					trace(new Date(), "KRecordControl: playing: " + _streamUid);
+					trace(new Date(), "VRecordControl: playing: " + _streamUid);
 				
 				if (isH264) {
 					_previewStream.play("mp4:" + _streamUid + ".f4v");
@@ -1054,7 +1054,7 @@ package com.kaltura.recording.controller {
 
 
 		/**
-		 * add the last recording as a new Kaltura entry in the Kaltura Network.
+		 * add the last recording as a new Vidiun entry in the Vidiun Network.
 		 * @param entry_name				the name for the new added entry.
 		 * @param entry_tags				user tags for the newly created entry.
 		 * @param entry_description			description of the newly created entry.
@@ -1067,14 +1067,14 @@ package com.kaltura.recording.controller {
 		 * @param group_id					used to group multiple entries in a group.
 		 * @param partner_data				special custom data for partners to store.
 		 * @param conversionQuality			conversion profile to be used with entry. if null, partner defult profile is used
-		 * @see com.kaltura.recording.business.AddEntryDelegate
+		 * @see com.vidiun.recording.business.AddEntryDelegate
 		 */
 		public function addEntry(entry_name:String, entry_tags:String, entry_description:String, credits_screen_name:String = '',
 			credits_site_url:String = '', categories:String = "", admin_tags:String = '', license_type:String = '',
 			credit:String = '', group_id:String = '', partner_data:String = '', conversionQuality:String = ''):void {
 
-			var kc:KalturaClient = Global.KALTURA_CLIENT;
-			var entry:KalturaMediaEntry = new KalturaMediaEntry();
+			var vc:VidiunClient = Global.VIDIUN_CLIENT;
+			var entry:VidiunMediaEntry = new VidiunMediaEntry();
 			entry.mediaType = 1;
 			entry.name = entry_name;
 			entry.tags = entry_tags;
@@ -1096,22 +1096,22 @@ package com.kaltura.recording.controller {
 			//
 			var addEntry:MediaAddFromRecordedWebcam = new MediaAddFromRecordedWebcam(entry, streamUid);
 			addEntry.useTimeout = false;
-			addEntry.addEventListener(KalturaEvent.COMPLETE, addEntryResultHandler);
-			addEntry.addEventListener(KalturaEvent.FAILED, addEntryFaultHandler);
-			kc.post(addEntry);
+			addEntry.addEventListener(VidiunEvent.COMPLETE, addEntryResultHandler);
+			addEntry.addEventListener(VidiunEvent.FAILED, addEntryFaultHandler);
+			vc.post(addEntry);
 		}
 
 
 		private function addEntryResultHandler(data:Object):void {
 			if (debugTrace) 
-				trace(new Date(), "KRecordControl: result, ", ObjectUtil.toString(data));
+				trace(new Date(), "VRecordControl: result, ", ObjectUtil.toString(data));
 			dispatchEvent(new AddEntryEvent(AddEntryEvent.ADD_ENTRY_RESULT, data.data));
 		}
 
 
 		private function addEntryFaultHandler(info:Object):void {
 			if (debugTrace) 
-				trace(new Date(), "KRecordControl: fault, ", ObjectUtil.toString(info));
+				trace(new Date(), "VRecordControl: fault, ", ObjectUtil.toString(info));
 			dispatchEvent(new AddEntryEvent(AddEntryEvent.ADD_ENTRY_FAULT, info));
 		}
 	}

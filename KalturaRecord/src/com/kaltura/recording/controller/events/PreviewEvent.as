@@ -1,4 +1,4 @@
-package com.kaltura.recording.controller.events
+package com.vidiun.recording.controller.events
 {
 	import flash.events.Event;
 	

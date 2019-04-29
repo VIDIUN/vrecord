@@ -1,10 +1,10 @@
 <?php
 /*
-This file is part of the Kaltura Collaborative Media Suite which allows users
+This file is part of the Vidiun Collaborative Media Suite which allows users
 to do with audio, video, and animation what Wiki platfroms allow them to do with
 text.
 
-Copyright (C) 2006-2008 Kaltura Inc.
+Copyright (C) 2006-2008 Vidiun Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -20,9 +20,9 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once("kaltura_client_base.php");
+require_once("vidiun_client_base.php");
 
-class KalturaEntry
+class VidiunEntry
 {
 	public $name;
 	public $tags;
@@ -47,7 +47,7 @@ class KalturaEntry
 	public $thumbOffset;
 }
 
-class KalturaKShow
+class VidiunVShow
 {
 	public $name;
 	public $description;
@@ -59,14 +59,14 @@ class KalturaKShow
 	public $allowQuickEdit;
 }
 
-class KalturaModeration
+class VidiunModeration
 {
 	public $comments;
 	public $objectType;
 	public $objectId;
 }
 
-class KalturaUser
+class VidiunUser
 {
 	public $screenName;
 	public $fullName;
@@ -85,9 +85,9 @@ class KalturaUser
 	public $partnerData;
 }
 
-class KalturaWidget
+class VidiunWidget
 {
-	public $kshowId;
+	public $vshowId;
 	public $entryId;
 	public $sourceWidgetId;
 	public $uiConfId;
@@ -96,16 +96,16 @@ class KalturaWidget
 	public $securityType;
 }
 
-class KalturaPuserKuser
+class VidiunPuserVuser
 {
 }
 
-class KalturaUiConf
+class VidiunUiConf
 {
 	public $name;
 }
 
-class KalturaEntryFilter
+class VidiunEntryFilter
 {
 	const ORDER_BY_CREATED_AT_ASC = "+created_at";
 	const ORDER_BY_CREATED_AT_DESC = "-created_at";
@@ -115,7 +115,7 @@ class KalturaEntryFilter
 	const ORDER_BY_ID_DESC = "-id";
 
 	public $equalUserId;
-	public $equalKshowId;
+	public $equalVshowId;
 	public $equalType;
 	public $inType;
 	public $equalMediaType;
@@ -132,7 +132,7 @@ class KalturaEntryFilter
 	public $orderBy;
 }
 
-class KalturaKShowFilter
+class VidiunVShowFilter
 {
 	const ORDER_BY_CREATED_AT_ASC = "+created_at";
 	const ORDER_BY_CREATED_AT_DESC = "-created_at";
@@ -149,7 +149,7 @@ class KalturaKShowFilter
 	public $orderBy;
 }
 
-class KalturaModerationFilter
+class VidiunModerationFilter
 {
 	const ORDER_BY_ID_ASC = "+id";
 	const ORDER_BY_ID_DESC = "-id";
@@ -164,7 +164,7 @@ class KalturaModerationFilter
 	public $orderBy;
 }
 
-class KalturaNotificationFilter
+class VidiunNotificationFilter
 {
 	const ORDER_BY_ID_ASC = "+id";
 	const ORDER_BY_ID_DESC = "-id";
@@ -176,14 +176,14 @@ class KalturaNotificationFilter
 	public $orderBy;
 }
 
-class KalturaNotification
+class VidiunNotification
 {
 	public $id;
 	public $status;
 	public $notificationResult;
 }
 
-class KalturaPartner
+class VidiunPartner
 {
 	public $name;
 	public $url1;
@@ -195,14 +195,14 @@ class KalturaPartner
 	public $commercialUse;
 }
 
-class KalturaClient extends KalturaClientBase
+class VidiunClient extends VidiunClientBase
 {
 	public function __constructor()
 	{
 		parent::__constructor();
 	}
 
-	public function addDvdEntry(KalturaSessionUser $kalturaSessionUser, KalturaEntry $dvdEntry)
+	public function addDvdEntry(VidiunSessionUser $vidiunSessionUser, VidiunEntry $dvdEntry)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "dvdEntry_name", $dvdEntry->name);
@@ -227,14 +227,14 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "dvdEntry_indexedCustomData1", $dvdEntry->indexedCustomData1);
 		$this->addOptionalParam($params, "dvdEntry_thumbOffset", $dvdEntry->thumbOffset);
 
-		$result = $this->hit("adddvdentry", $kalturaSessionUser, $params);
+		$result = $this->hit("adddvdentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function addEntry(KalturaSessionUser $kalturaSessionUser, $kshowId, KalturaEntry $entry, $uid = null)
+	public function addEntry(VidiunSessionUser $vidiunSessionUser, $vshowId, VidiunEntry $entry, $uid = null)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$this->addOptionalParam($params, "entry_name", $entry->name);
 		$this->addOptionalParam($params, "entry_tags", $entry->tags);
 		$this->addOptionalParam($params, "entry_type", $entry->type);
@@ -258,43 +258,43 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "entry_thumbOffset", $entry->thumbOffset);
 		$this->addOptionalParam($params, "uid", $uid);
 
-		$result = $this->hit("addentry", $kalturaSessionUser, $params);
+		$result = $this->hit("addentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function addKShow(KalturaSessionUser $kalturaSessionUser, KalturaKShow $kshow, $detailed = null, $allowDuplicateNames = null)
+	public function addVShow(VidiunSessionUser $vidiunSessionUser, VidiunVShow $vshow, $detailed = null, $allowDuplicateNames = null)
 	{
 		$params = array();
-		$this->addOptionalParam($params, "kshow_name", $kshow->name);
-		$this->addOptionalParam($params, "kshow_description", $kshow->description);
-		$this->addOptionalParam($params, "kshow_tags", $kshow->tags);
-		$this->addOptionalParam($params, "kshow_indexedCustomData3", $kshow->indexedCustomData3);
-		$this->addOptionalParam($params, "kshow_groupId", $kshow->groupId);
-		$this->addOptionalParam($params, "kshow_permissions", $kshow->permissions);
-		$this->addOptionalParam($params, "kshow_partnerData", $kshow->partnerData);
-		$this->addOptionalParam($params, "kshow_allowQuickEdit", $kshow->allowQuickEdit);
+		$this->addOptionalParam($params, "vshow_name", $vshow->name);
+		$this->addOptionalParam($params, "vshow_description", $vshow->description);
+		$this->addOptionalParam($params, "vshow_tags", $vshow->tags);
+		$this->addOptionalParam($params, "vshow_indexedCustomData3", $vshow->indexedCustomData3);
+		$this->addOptionalParam($params, "vshow_groupId", $vshow->groupId);
+		$this->addOptionalParam($params, "vshow_permissions", $vshow->permissions);
+		$this->addOptionalParam($params, "vshow_partnerData", $vshow->partnerData);
+		$this->addOptionalParam($params, "vshow_allowQuickEdit", $vshow->allowQuickEdit);
 		$this->addOptionalParam($params, "detailed", $detailed);
 		$this->addOptionalParam($params, "allow_duplicate_names", $allowDuplicateNames);
 
-		$result = $this->hit("addkshow", $kalturaSessionUser, $params);
+		$result = $this->hit("addvshow", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function addModeration(KalturaSessionUser $kalturaSessionUser, KalturaModeration $moderation)
+	public function addModeration(VidiunSessionUser $vidiunSessionUser, VidiunModeration $moderation)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "moderation_comments", $moderation->comments);
 		$this->addOptionalParam($params, "moderation_objectType", $moderation->objectType);
 		$this->addOptionalParam($params, "moderation_objectId", $moderation->objectId);
 
-		$result = $this->hit("addmoderation", $kalturaSessionUser, $params);
+		$result = $this->hit("addmoderation", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function addPartnerEntry(KalturaSessionUser $kalturaSessionUser, $kshowId, KalturaEntry $entry, $uid = null)
+	public function addPartnerEntry(VidiunSessionUser $vidiunSessionUser, $vshowId, VidiunEntry $entry, $uid = null)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$this->addOptionalParam($params, "entry_name", $entry->name);
 		$this->addOptionalParam($params, "entry_tags", $entry->tags);
 		$this->addOptionalParam($params, "entry_type", $entry->type);
@@ -318,11 +318,11 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "entry_thumbOffset", $entry->thumbOffset);
 		$this->addOptionalParam($params, "uid", $uid);
 
-		$result = $this->hit("addpartnerentry", $kalturaSessionUser, $params);
+		$result = $this->hit("addpartnerentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function addUser(KalturaSessionUser $kalturaSessionUser, $userId, KalturaUser $user)
+	public function addUser(VidiunSessionUser $vidiunSessionUser, $userId, VidiunUser $user)
 	{
 		$params = array();
 		$params["user_id"] = $userId;
@@ -342,14 +342,14 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "user_networkCollege", $user->networkCollege);
 		$this->addOptionalParam($params, "user_partnerData", $user->partnerData);
 
-		$result = $this->hit("adduser", $kalturaSessionUser, $params);
+		$result = $this->hit("adduser", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function addWidget(KalturaSessionUser $kalturaSessionUser, KalturaWidget $widget)
+	public function addWidget(VidiunSessionUser $vidiunSessionUser, VidiunWidget $widget)
 	{
 		$params = array();
-		$this->addOptionalParam($params, "widget_kshowId", $widget->kshowId);
+		$this->addOptionalParam($params, "widget_vshowId", $widget->vshowId);
 		$this->addOptionalParam($params, "widget_entryId", $widget->entryId);
 		$this->addOptionalParam($params, "widget_sourceWidgetId", $widget->sourceWidgetId);
 		$this->addOptionalParam($params, "widget_uiConfId", $widget->uiConfId);
@@ -357,32 +357,32 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "widget_partnerData", $widget->partnerData);
 		$this->addOptionalParam($params, "widget_securityType", $widget->securityType);
 
-		$result = $this->hit("addwidget", $kalturaSessionUser, $params);
+		$result = $this->hit("addwidget", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function checkNotifications(KalturaSessionUser $kalturaSessionUser, $notificationIds, $separator = ",", $detailed = null)
+	public function checkNotifications(VidiunSessionUser $vidiunSessionUser, $notificationIds, $separator = ",", $detailed = null)
 	{
 		$params = array();
 		$params["notification_ids"] = $notificationIds;
 		$this->addOptionalParam($params, "separator", $separator);
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("checknotifications", $kalturaSessionUser, $params);
+		$result = $this->hit("checknotifications", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function cloneKShow(KalturaSessionUser $kalturaSessionUser, $kshowId, $detailed = null)
+	public function cloneVShow(VidiunSessionUser $vidiunSessionUser, $vshowId, $detailed = null)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("clonekshow", $kalturaSessionUser, $params);
+		$result = $this->hit("clonevshow", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function collectStats(KalturaSessionUser $kalturaSessionUser, $objType, $objId, $command, $value, $extraInfo, $kshowId = null)
+	public function collectStats(VidiunSessionUser $vidiunSessionUser, $objType, $objId, $command, $value, $extraInfo, $vshowId = null)
 	{
 		$params = array();
 		$params["obj_type"] = $objType;
@@ -390,179 +390,179 @@ class KalturaClient extends KalturaClientBase
 		$params["command"] = $command;
 		$params["value"] = $value;
 		$params["extra_info"] = $extraInfo;
-		$this->addOptionalParam($params, "kshow_id", $kshowId);
+		$this->addOptionalParam($params, "vshow_id", $vshowId);
 
-		$result = $this->hit("collectstats", $kalturaSessionUser, $params);
+		$result = $this->hit("collectstats", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function deleteEntry(KalturaSessionUser $kalturaSessionUser, $entryId, $kshowId = null)
+	public function deleteEntry(VidiunSessionUser $vidiunSessionUser, $entryId, $vshowId = null)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
-		$this->addOptionalParam($params, "kshow_id", $kshowId);
+		$this->addOptionalParam($params, "vshow_id", $vshowId);
 
-		$result = $this->hit("deleteentry", $kalturaSessionUser, $params);
+		$result = $this->hit("deleteentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function deleteKShow(KalturaSessionUser $kalturaSessionUser, $kshowId)
+	public function deleteVShow(VidiunSessionUser $vidiunSessionUser, $vshowId)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 
-		$result = $this->hit("deletekshow", $kalturaSessionUser, $params);
+		$result = $this->hit("deletevshow", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function deleteUser(KalturaSessionUser $kalturaSessionUser, $userId)
+	public function deleteUser(VidiunSessionUser $vidiunSessionUser, $userId)
 	{
 		$params = array();
 		$params["user_id"] = $userId;
 
-		$result = $this->hit("deleteuser", $kalturaSessionUser, $params);
+		$result = $this->hit("deleteuser", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getAllEntries(KalturaSessionUser $kalturaSessionUser, $entryId, $kshowId, $listType = null, $version = null)
+	public function getAllEntries(VidiunSessionUser $vidiunSessionUser, $entryId, $vshowId, $listType = null, $version = null)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$this->addOptionalParam($params, "list_type", $listType);
 		$this->addOptionalParam($params, "version", $version);
 
-		$result = $this->hit("getallentries", $kalturaSessionUser, $params);
+		$result = $this->hit("getallentries", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getDvdEntry(KalturaSessionUser $kalturaSessionUser, $dvdEntryId, $detailed = null)
+	public function getDvdEntry(VidiunSessionUser $vidiunSessionUser, $dvdEntryId, $detailed = null)
 	{
 		$params = array();
 		$params["dvdEntry_id"] = $dvdEntryId;
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("getdvdentry", $kalturaSessionUser, $params);
+		$result = $this->hit("getdvdentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getEntries(KalturaSessionUser $kalturaSessionUser, $entryIds, $separator = ",", $detailed = null)
+	public function getEntries(VidiunSessionUser $vidiunSessionUser, $entryIds, $separator = ",", $detailed = null)
 	{
 		$params = array();
 		$params["entry_ids"] = $entryIds;
 		$this->addOptionalParam($params, "separator", $separator);
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("getentries", $kalturaSessionUser, $params);
+		$result = $this->hit("getentries", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getEntry(KalturaSessionUser $kalturaSessionUser, $entryId, $detailed = null, $version = null)
+	public function getEntry(VidiunSessionUser $vidiunSessionUser, $entryId, $detailed = null, $version = null)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
 		$this->addOptionalParam($params, "detailed", $detailed);
 		$this->addOptionalParam($params, "version", $version);
 
-		$result = $this->hit("getentry", $kalturaSessionUser, $params);
+		$result = $this->hit("getentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getKShow(KalturaSessionUser $kalturaSessionUser, $kshowId, $detailed = null)
+	public function getVShow(VidiunSessionUser $vidiunSessionUser, $vshowId, $detailed = null)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("getkshow", $kalturaSessionUser, $params);
+		$result = $this->hit("getvshow", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getLastVersionsInfo(KalturaSessionUser $kalturaSessionUser, $kshowId)
+	public function getLastVersionsInfo(VidiunSessionUser $vidiunSessionUser, $vshowId)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 
-		$result = $this->hit("getlastversionsinfo", $kalturaSessionUser, $params);
+		$result = $this->hit("getlastversionsinfo", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getMetaDataAction(KalturaSessionUser $kalturaSessionUser, $entryId, $kshowId, $version)
+	public function getMetaDataAction(VidiunSessionUser $vidiunSessionUser, $entryId, $vshowId, $version)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$params["version"] = $version;
 
-		$result = $this->hit("getmetadata", $kalturaSessionUser, $params);
+		$result = $this->hit("getmetadata", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getPartner(KalturaSessionUser $kalturaSessionUser, $partnerAdminEmail, $cmsPassword, $partnerId)
+	public function getPartner(VidiunSessionUser $vidiunSessionUser, $partnerAdminEmail, $cmsPassword, $partnerId)
 	{
 		$params = array();
 		$params["partner_adminEmail"] = $partnerAdminEmail;
 		$params["cms_password"] = $cmsPassword;
 		$params["partner_id"] = $partnerId;
 
-		$result = $this->hit("getpartner", $kalturaSessionUser, $params);
+		$result = $this->hit("getpartner", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getThumbnail(KalturaSessionUser $kalturaSessionUser, $filename)
+	public function getThumbnail(VidiunSessionUser $vidiunSessionUser, $filename)
 	{
 		$params = array();
 		$params["filename"] = $filename;
 
-		$result = $this->hit("getthumbnail", $kalturaSessionUser, $params);
+		$result = $this->hit("getthumbnail", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getUIConf(KalturaSessionUser $kalturaSessionUser, $uiConfId, $detailed = null)
+	public function getUIConf(VidiunSessionUser $vidiunSessionUser, $uiConfId, $detailed = null)
 	{
 		$params = array();
 		$params["ui_conf_id"] = $uiConfId;
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("getuiconf", $kalturaSessionUser, $params);
+		$result = $this->hit("getuiconf", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getUser(KalturaSessionUser $kalturaSessionUser, $userId, $detailed = null)
+	public function getUser(VidiunSessionUser $vidiunSessionUser, $userId, $detailed = null)
 	{
 		$params = array();
 		$params["user_id"] = $userId;
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("getuser", $kalturaSessionUser, $params);
+		$result = $this->hit("getuser", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function getWidget(KalturaSessionUser $kalturaSessionUser, $widgetId, $detailed = null)
+	public function getWidget(VidiunSessionUser $vidiunSessionUser, $widgetId, $detailed = null)
 	{
 		$params = array();
 		$params["widget_id"] = $widgetId;
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("getwidget", $kalturaSessionUser, $params);
+		$result = $this->hit("getwidget", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function handleModeration(KalturaSessionUser $kalturaSessionUser, $moderationId, $moderationStatus)
+	public function handleModeration(VidiunSessionUser $vidiunSessionUser, $moderationId, $moderationStatus)
 	{
 		$params = array();
 		$params["moderation_id"] = $moderationId;
 		$params["moderation_status"] = $moderationStatus;
 
-		$result = $this->hit("handlemoderation", $kalturaSessionUser, $params);
+		$result = $this->hit("handlemoderation", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listDvdEntries(KalturaSessionUser $kalturaSessionUser, KalturaEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
+	public function listDvdEntries(VidiunSessionUser $vidiunSessionUser, VidiunEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__eq_user_id", $filter->equalUserId);
-		$this->addOptionalParam($params, "filter__eq_kshow_id", $filter->equalKshowId);
+		$this->addOptionalParam($params, "filter__eq_vshow_id", $filter->equalVshowId);
 		$this->addOptionalParam($params, "filter__eq_type", $filter->equalType);
 		$this->addOptionalParam($params, "filter__in_type", $filter->inType);
 		$this->addOptionalParam($params, "filter__eq_media_type", $filter->equalMediaType);
@@ -582,15 +582,15 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page", $page);
 		$this->addOptionalParam($params, "use_filter_puser_id", $useFilterPuserId);
 
-		$result = $this->hit("listdvdentries", $kalturaSessionUser, $params);
+		$result = $this->hit("listdvdentries", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listEntries(KalturaSessionUser $kalturaSessionUser, KalturaEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
+	public function listEntries(VidiunSessionUser $vidiunSessionUser, VidiunEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__eq_user_id", $filter->equalUserId);
-		$this->addOptionalParam($params, "filter__eq_kshow_id", $filter->equalKshowId);
+		$this->addOptionalParam($params, "filter__eq_vshow_id", $filter->equalVshowId);
 		$this->addOptionalParam($params, "filter__eq_type", $filter->equalType);
 		$this->addOptionalParam($params, "filter__in_type", $filter->inType);
 		$this->addOptionalParam($params, "filter__eq_media_type", $filter->equalMediaType);
@@ -610,11 +610,11 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page", $page);
 		$this->addOptionalParam($params, "use_filter_puser_id", $useFilterPuserId);
 
-		$result = $this->hit("listentries", $kalturaSessionUser, $params);
+		$result = $this->hit("listentries", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listKShows(KalturaSessionUser $kalturaSessionUser, KalturaKShowFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
+	public function listVShows(VidiunSessionUser $vidiunSessionUser, VidiunVShowFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__gte_views", $filter->greaterThanOrEqualViews);
@@ -628,11 +628,11 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page", $page);
 		$this->addOptionalParam($params, "use_filter_puser_id", $useFilterPuserId);
 
-		$result = $this->hit("listkshows", $kalturaSessionUser, $params);
+		$result = $this->hit("listvshows", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listModerations(KalturaSessionUser $kalturaSessionUser, KalturaModerationFilter $filter, $detailed = null, $pageSize = 10, $page = 1)
+	public function listModerations(VidiunSessionUser $vidiunSessionUser, VidiunModerationFilter $filter, $detailed = null, $pageSize = 10, $page = 1)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__eq_id", $filter->equalId);
@@ -647,15 +647,15 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page_size", $pageSize);
 		$this->addOptionalParam($params, "page", $page);
 
-		$result = $this->hit("listmoderations", $kalturaSessionUser, $params);
+		$result = $this->hit("listmoderations", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listMyDvdEntries(KalturaSessionUser $kalturaSessionUser, KalturaEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
+	public function listMyDvdEntries(VidiunSessionUser $vidiunSessionUser, VidiunEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__eq_user_id", $filter->equalUserId);
-		$this->addOptionalParam($params, "filter__eq_kshow_id", $filter->equalKshowId);
+		$this->addOptionalParam($params, "filter__eq_vshow_id", $filter->equalVshowId);
 		$this->addOptionalParam($params, "filter__eq_type", $filter->equalType);
 		$this->addOptionalParam($params, "filter__in_type", $filter->inType);
 		$this->addOptionalParam($params, "filter__eq_media_type", $filter->equalMediaType);
@@ -675,15 +675,15 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page", $page);
 		$this->addOptionalParam($params, "use_filter_puser_id", $useFilterPuserId);
 
-		$result = $this->hit("listmydvdentries", $kalturaSessionUser, $params);
+		$result = $this->hit("listmydvdentries", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listMyEntries(KalturaSessionUser $kalturaSessionUser, KalturaEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
+	public function listMyEntries(VidiunSessionUser $vidiunSessionUser, VidiunEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__eq_user_id", $filter->equalUserId);
-		$this->addOptionalParam($params, "filter__eq_kshow_id", $filter->equalKshowId);
+		$this->addOptionalParam($params, "filter__eq_vshow_id", $filter->equalVshowId);
 		$this->addOptionalParam($params, "filter__eq_type", $filter->equalType);
 		$this->addOptionalParam($params, "filter__in_type", $filter->inType);
 		$this->addOptionalParam($params, "filter__eq_media_type", $filter->equalMediaType);
@@ -703,11 +703,11 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page", $page);
 		$this->addOptionalParam($params, "use_filter_puser_id", $useFilterPuserId);
 
-		$result = $this->hit("listmyentries", $kalturaSessionUser, $params);
+		$result = $this->hit("listmyentries", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listMyKShows(KalturaSessionUser $kalturaSessionUser, KalturaKShowFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
+	public function listMyVShows(VidiunSessionUser $vidiunSessionUser, VidiunVShowFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__gte_views", $filter->greaterThanOrEqualViews);
@@ -721,11 +721,11 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page", $page);
 		$this->addOptionalParam($params, "use_filter_puser_id", $useFilterPuserId);
 
-		$result = $this->hit("listmykshows", $kalturaSessionUser, $params);
+		$result = $this->hit("listmyvshows", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listNotifications(KalturaSessionUser $kalturaSessionUser, KalturaNotificationFilter $filter, $pageSize = 10, $page = 1)
+	public function listNotifications(VidiunSessionUser $vidiunSessionUser, VidiunNotificationFilter $filter, $pageSize = 10, $page = 1)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__eq_id", $filter->equalId);
@@ -736,15 +736,15 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page_size", $pageSize);
 		$this->addOptionalParam($params, "page", $page);
 
-		$result = $this->hit("listnotifications", $kalturaSessionUser, $params);
+		$result = $this->hit("listnotifications", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function listPartnerEntries(KalturaSessionUser $kalturaSessionUser, KalturaEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
+	public function listPartnerEntries(VidiunSessionUser $vidiunSessionUser, VidiunEntryFilter $filter, $detailed = null, $pageSize = 10, $page = 1, $useFilterPuserId = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "filter__eq_user_id", $filter->equalUserId);
-		$this->addOptionalParam($params, "filter__eq_kshow_id", $filter->equalKshowId);
+		$this->addOptionalParam($params, "filter__eq_vshow_id", $filter->equalVshowId);
 		$this->addOptionalParam($params, "filter__eq_type", $filter->equalType);
 		$this->addOptionalParam($params, "filter__in_type", $filter->inType);
 		$this->addOptionalParam($params, "filter__eq_media_type", $filter->equalMediaType);
@@ -764,23 +764,23 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page", $page);
 		$this->addOptionalParam($params, "use_filter_puser_id", $useFilterPuserId);
 
-		$result = $this->hit("listpartnerentries", $kalturaSessionUser, $params);
+		$result = $this->hit("listpartnerentries", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function rankKShow(KalturaSessionUser $kalturaSessionUser, $kshowId, $rank, $pageSize = 10, $page = 1)
+	public function rankVShow(VidiunSessionUser $vidiunSessionUser, $vshowId, $rank, $pageSize = 10, $page = 1)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$params["rank"] = $rank;
 		$this->addOptionalParam($params, "page_size", $pageSize);
 		$this->addOptionalParam($params, "page", $page);
 
-		$result = $this->hit("rankkshow", $kalturaSessionUser, $params);
+		$result = $this->hit("rankvshow", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function registerPartner(KalturaSessionUser $kalturaSessionUser, KalturaPartner $partner, $cmsPassword = null)
+	public function registerPartner(VidiunSessionUser $vidiunSessionUser, VidiunPartner $partner, $cmsPassword = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "partner_name", $partner->name);
@@ -793,43 +793,43 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "partner_commercialUse", $partner->commercialUse);
 		$this->addOptionalParam($params, "cms_password", $cmsPassword);
 
-		$result = $this->hit("registerpartner", $kalturaSessionUser, $params);
+		$result = $this->hit("registerpartner", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function reportEntry(KalturaSessionUser $kalturaSessionUser, KalturaModeration $moderation)
+	public function reportEntry(VidiunSessionUser $vidiunSessionUser, VidiunModeration $moderation)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "moderation_comments", $moderation->comments);
 		$this->addOptionalParam($params, "moderation_objectType", $moderation->objectType);
 		$this->addOptionalParam($params, "moderation_objectId", $moderation->objectId);
 
-		$result = $this->hit("reportentry", $kalturaSessionUser, $params);
+		$result = $this->hit("reportentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function reportKShow(KalturaSessionUser $kalturaSessionUser, KalturaModeration $moderation)
+	public function reportVShow(VidiunSessionUser $vidiunSessionUser, VidiunModeration $moderation)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "moderation_comments", $moderation->comments);
 		$this->addOptionalParam($params, "moderation_objectType", $moderation->objectType);
 		$this->addOptionalParam($params, "moderation_objectId", $moderation->objectId);
 
-		$result = $this->hit("reportkshow", $kalturaSessionUser, $params);
+		$result = $this->hit("reportvshow", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function rollbackKShow(KalturaSessionUser $kalturaSessionUser, $kshowId, $kshowVersion)
+	public function rollbackVShow(VidiunSessionUser $vidiunSessionUser, $vshowId, $vshowVersion)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
-		$params["kshow_version"] = $kshowVersion;
+		$params["vshow_id"] = $vshowId;
+		$params["vshow_version"] = $vshowVersion;
 
-		$result = $this->hit("rollbackkshow", $kalturaSessionUser, $params);
+		$result = $this->hit("rollbackvshow", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function search(KalturaSessionUser $kalturaSessionUser, $mediaType, $mediaSource, $search, $authData, $page = 1, $pageSize = 10)
+	public function search(VidiunSessionUser $vidiunSessionUser, $mediaType, $mediaSource, $search, $authData, $page = 1, $pageSize = 10)
 	{
 		$params = array();
 		$params["media_type"] = $mediaType;
@@ -839,60 +839,60 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "page", $page);
 		$this->addOptionalParam($params, "page_size", $pageSize);
 
-		$result = $this->hit("search", $kalturaSessionUser, $params);
+		$result = $this->hit("search", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function searchAuthData(KalturaSessionUser $kalturaSessionUser, $mediaSource, $username, $password)
+	public function searchAuthData(VidiunSessionUser $vidiunSessionUser, $mediaSource, $username, $password)
 	{
 		$params = array();
 		$params["media_source"] = $mediaSource;
 		$params["username"] = $username;
 		$params["password"] = $password;
 
-		$result = $this->hit("searchauthdata", $kalturaSessionUser, $params);
+		$result = $this->hit("searchauthdata", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function searchFromUrl(KalturaSessionUser $kalturaSessionUser, $url, $mediaType)
+	public function searchFromUrl(VidiunSessionUser $vidiunSessionUser, $url, $mediaType)
 	{
 		$params = array();
 		$params["url"] = $url;
 		$params["media_type"] = $mediaType;
 
-		$result = $this->hit("searchfromurl", $kalturaSessionUser, $params);
+		$result = $this->hit("searchfromurl", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function searchMediaInfo(KalturaSessionUser $kalturaSessionUser)
+	public function searchMediaInfo(VidiunSessionUser $vidiunSessionUser)
 	{
 		$params = array();
 
-		$result = $this->hit("searchmediainfo", $kalturaSessionUser, $params);
+		$result = $this->hit("searchmediainfo", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function searchmediaproviders(KalturaSessionUser $kalturaSessionUser)
+	public function searchmediaproviders(VidiunSessionUser $vidiunSessionUser)
 	{
 		$params = array();
 
-		$result = $this->hit("searchmediaproviders", $kalturaSessionUser, $params);
+		$result = $this->hit("searchmediaproviders", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function setMetaData(KalturaSessionUser $kalturaSessionUser, $entryId, $kshowId, $hasRoughCut, $xml)
+	public function setMetaData(VidiunSessionUser $vidiunSessionUser, $entryId, $vshowId, $hasRoughCut, $xml)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$params["HasRoughCut"] = $hasRoughCut;
 		$params["xml"] = $xml;
 
-		$result = $this->hit("setmetadata", $kalturaSessionUser, $params);
+		$result = $this->hit("setmetadata", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function startSession(KalturaSessionUser $kalturaSessionUser, $secret, $admin = null, $privileges = null, $expiry = 86400)
+	public function startSession(VidiunSessionUser $vidiunSessionUser, $secret, $admin = null, $privileges = null, $expiry = 86400)
 	{
 		$params = array();
 		$params["secret"] = $secret;
@@ -900,21 +900,21 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "privileges", $privileges);
 		$this->addOptionalParam($params, "expiry", $expiry);
 
-		$result = $this->hit("startsession", $kalturaSessionUser, $params);
+		$result = $this->hit("startsession", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function startWidgetSession(KalturaSessionUser $kalturaSessionUser, $widgetId, $expiry = 86400)
+	public function startWidgetSession(VidiunSessionUser $vidiunSessionUser, $widgetId, $expiry = 86400)
 	{
 		$params = array();
 		$params["widget_id"] = $widgetId;
 		$this->addOptionalParam($params, "expiry", $expiry);
 
-		$result = $this->hit("startwidgetsession", $kalturaSessionUser, $params);
+		$result = $this->hit("startwidgetsession", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateDvdEntry(KalturaSessionUser $kalturaSessionUser, $entryId, KalturaEntry $entry)
+	public function updateDvdEntry(VidiunSessionUser $vidiunSessionUser, $entryId, VidiunEntry $entry)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
@@ -940,21 +940,21 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "entry_indexedCustomData1", $entry->indexedCustomData1);
 		$this->addOptionalParam($params, "entry_thumbOffset", $entry->thumbOffset);
 
-		$result = $this->hit("updatedvdentry", $kalturaSessionUser, $params);
+		$result = $this->hit("updatedvdentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateEntriesThumbnails(KalturaSessionUser $kalturaSessionUser, $entryIds, $timeOffset)
+	public function updateEntriesThumbnails(VidiunSessionUser $vidiunSessionUser, $entryIds, $timeOffset)
 	{
 		$params = array();
 		$params["entry_ids"] = $entryIds;
 		$params["time_offset"] = $timeOffset;
 
-		$result = $this->hit("updateentriesthumbnails", $kalturaSessionUser, $params);
+		$result = $this->hit("updateentriesthumbnails", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateEntry(KalturaSessionUser $kalturaSessionUser, $entryId, KalturaEntry $entry)
+	public function updateEntry(VidiunSessionUser $vidiunSessionUser, $entryId, VidiunEntry $entry)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
@@ -980,71 +980,71 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "entry_indexedCustomData1", $entry->indexedCustomData1);
 		$this->addOptionalParam($params, "entry_thumbOffset", $entry->thumbOffset);
 
-		$result = $this->hit("updateentry", $kalturaSessionUser, $params);
+		$result = $this->hit("updateentry", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateEntryThumbnail(KalturaSessionUser $kalturaSessionUser, $entryId, $sourceEntryId = null, $timeOffset = null)
+	public function updateEntryThumbnail(VidiunSessionUser $vidiunSessionUser, $entryId, $sourceEntryId = null, $timeOffset = null)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
 		$this->addOptionalParam($params, "source_entry_id", $sourceEntryId);
 		$this->addOptionalParam($params, "time_offset", $timeOffset);
 
-		$result = $this->hit("updateentrythumbnail", $kalturaSessionUser, $params);
+		$result = $this->hit("updateentrythumbnail", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateEntryThumbnailJpeg(KalturaSessionUser $kalturaSessionUser, $entryId)
+	public function updateEntryThumbnailJpeg(VidiunSessionUser $vidiunSessionUser, $entryId)
 	{
 		$params = array();
 		$params["entry_id"] = $entryId;
 
-		$result = $this->hit("updateentrythumbnailjpeg", $kalturaSessionUser, $params);
+		$result = $this->hit("updateentrythumbnailjpeg", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateKShow(KalturaSessionUser $kalturaSessionUser, $kshowId, KalturaKShow $kshow, $detailed = null, $allowDuplicateNames = null)
+	public function updateVShow(VidiunSessionUser $vidiunSessionUser, $vshowId, VidiunVShow $vshow, $detailed = null, $allowDuplicateNames = null)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
-		$this->addOptionalParam($params, "kshow_name", $kshow->name);
-		$this->addOptionalParam($params, "kshow_description", $kshow->description);
-		$this->addOptionalParam($params, "kshow_tags", $kshow->tags);
-		$this->addOptionalParam($params, "kshow_indexedCustomData3", $kshow->indexedCustomData3);
-		$this->addOptionalParam($params, "kshow_groupId", $kshow->groupId);
-		$this->addOptionalParam($params, "kshow_permissions", $kshow->permissions);
-		$this->addOptionalParam($params, "kshow_partnerData", $kshow->partnerData);
-		$this->addOptionalParam($params, "kshow_allowQuickEdit", $kshow->allowQuickEdit);
+		$params["vshow_id"] = $vshowId;
+		$this->addOptionalParam($params, "vshow_name", $vshow->name);
+		$this->addOptionalParam($params, "vshow_description", $vshow->description);
+		$this->addOptionalParam($params, "vshow_tags", $vshow->tags);
+		$this->addOptionalParam($params, "vshow_indexedCustomData3", $vshow->indexedCustomData3);
+		$this->addOptionalParam($params, "vshow_groupId", $vshow->groupId);
+		$this->addOptionalParam($params, "vshow_permissions", $vshow->permissions);
+		$this->addOptionalParam($params, "vshow_partnerData", $vshow->partnerData);
+		$this->addOptionalParam($params, "vshow_allowQuickEdit", $vshow->allowQuickEdit);
 		$this->addOptionalParam($params, "detailed", $detailed);
 		$this->addOptionalParam($params, "allow_duplicate_names", $allowDuplicateNames);
 
-		$result = $this->hit("updatekshow", $kalturaSessionUser, $params);
+		$result = $this->hit("updatevshow", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateKshowOwner(KalturaSessionUser $kalturaSessionUser, $kshowId, $detailed = null)
+	public function updateVshowOwner(VidiunSessionUser $vidiunSessionUser, $vshowId, $detailed = null)
 	{
 		$params = array();
-		$params["kshow_id"] = $kshowId;
+		$params["vshow_id"] = $vshowId;
 		$this->addOptionalParam($params, "detailed", $detailed);
 
-		$result = $this->hit("updatekshowowner", $kalturaSessionUser, $params);
+		$result = $this->hit("updatevshowowner", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateNotification(KalturaSessionUser $kalturaSessionUser, KalturaNotification $notification)
+	public function updateNotification(VidiunSessionUser $vidiunSessionUser, VidiunNotification $notification)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "notification_id", $notification->id);
 		$this->addOptionalParam($params, "notification_status", $notification->status);
 		$this->addOptionalParam($params, "notification_notificationResult", $notification->notificationResult);
 
-		$result = $this->hit("updatenotification", $kalturaSessionUser, $params);
+		$result = $this->hit("updatenotification", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateUser(KalturaSessionUser $kalturaSessionUser, $userId, KalturaUser $user)
+	public function updateUser(VidiunSessionUser $vidiunSessionUser, $userId, VidiunUser $user)
 	{
 		$params = array();
 		$params["user_id"] = $userId;
@@ -1064,48 +1064,48 @@ class KalturaClient extends KalturaClientBase
 		$this->addOptionalParam($params, "user_networkCollege", $user->networkCollege);
 		$this->addOptionalParam($params, "user_partnerData", $user->partnerData);
 
-		$result = $this->hit("updateuser", $kalturaSessionUser, $params);
+		$result = $this->hit("updateuser", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function updateUserId(KalturaSessionUser $kalturaSessionUser, $userId, $newUserId)
+	public function updateUserId(VidiunSessionUser $vidiunSessionUser, $userId, $newUserId)
 	{
 		$params = array();
 		$params["user_id"] = $userId;
 		$params["new_user_id"] = $newUserId;
 
-		$result = $this->hit("updateuserid", $kalturaSessionUser, $params);
+		$result = $this->hit("updateuserid", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function upload(KalturaSessionUser $kalturaSessionUser, $filename)
+	public function upload(VidiunSessionUser $vidiunSessionUser, $filename)
 	{
 		$params = array();
 		$params["filename"] = $filename;
 
-		$result = $this->hit("upload", $kalturaSessionUser, $params);
+		$result = $this->hit("upload", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function uploadJpeg(KalturaSessionUser $kalturaSessionUser, $filename, $hash)
+	public function uploadJpeg(VidiunSessionUser $vidiunSessionUser, $filename, $hash)
 	{
 		$params = array();
 		$params["filename"] = $filename;
 		$params["hash"] = $hash;
 
-		$result = $this->hit("uploadjpeg", $kalturaSessionUser, $params);
+		$result = $this->hit("uploadjpeg", $vidiunSessionUser, $params);
 		return $result;
 	}
 
-	public function viewWidget(KalturaSessionUser $kalturaSessionUser, $entryId = null, $kshowId = null, $widgetId = null, $host = null)
+	public function viewWidget(VidiunSessionUser $vidiunSessionUser, $entryId = null, $vshowId = null, $widgetId = null, $host = null)
 	{
 		$params = array();
 		$this->addOptionalParam($params, "entry_id", $entryId);
-		$this->addOptionalParam($params, "kshow_id", $kshowId);
+		$this->addOptionalParam($params, "vshow_id", $vshowId);
 		$this->addOptionalParam($params, "widget_id", $widgetId);
 		$this->addOptionalParam($params, "host", $host);
 
-		$result = $this->hit("viewwidget", $kalturaSessionUser, $params);
+		$result = $this->hit("viewwidget", $vidiunSessionUser, $params);
 		return $result;
 	}
 

@@ -5,11 +5,11 @@
    //                          | ' </ _` | |  _| || | '_/ _` |
    //                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
    //
-   // This file is part of the Kaltura Collaborative Media Suite which allows users
+   // This file is part of the Vidiun Collaborative Media Suite which allows users
    // to do with audio, video, and animation what Wiki platfroms allow them to do with
    // text.
    //
-   // Copyright (C) 2006-2008  Kaltura Inc.
+   // Copyright (C) 2006-2008  Vidiun Inc.
    //
    // This program is free software: you can redistribute it and/or modify
    // it under the terms of the GNU Affero General Public License as
@@ -28,27 +28,27 @@
    // ===================================================================================================
  */
 package {
-	import com.kaltura.KalturaClient;
-	import com.kaltura.config.KalturaConfig;
-	import com.kaltura.devicedetection.DeviceDetectionEvent;
-	import com.kaltura.net.streaming.events.ExNetConnectionEvent;
-	import com.kaltura.net.streaming.events.FlushStreamEvent;
-	import com.kaltura.net.streaming.events.RecordNetStreamEvent;
-	import com.kaltura.recording.business.BaseRecorderParams;
-	import com.kaltura.recording.controller.KRecordControl;
-	import com.kaltura.recording.controller.events.AddEntryEvent;
-	import com.kaltura.recording.controller.events.PreviewEvent;
-	import com.kaltura.recording.controller.events.RecorderEvent;
-	import com.kaltura.recording.view.KRecordViewParams;
-	import com.kaltura.recording.view.UIComponent;
-	import com.kaltura.recording.view.View;
-	import com.kaltura.recording.view.ViewEvent;
-	import com.kaltura.recording.view.ViewState;
-	import com.kaltura.recording.view.ViewStatePreview;
-	import com.kaltura.utils.KConfigUtil;
-	import com.kaltura.utils.KUtils;
-	import com.kaltura.utils.ObjectHelpers;
-	import com.kaltura.vo.KalturaMediaEntry;
+	import com.vidiun.VidiunClient;
+	import com.vidiun.config.VidiunConfig;
+	import com.vidiun.devicedetection.DeviceDetectionEvent;
+	import com.vidiun.net.streaming.events.ExNetConnectionEvent;
+	import com.vidiun.net.streaming.events.FlushStreamEvent;
+	import com.vidiun.net.streaming.events.RecordNetStreamEvent;
+	import com.vidiun.recording.business.BaseRecorderParams;
+	import com.vidiun.recording.controller.VRecordControl;
+	import com.vidiun.recording.controller.events.AddEntryEvent;
+	import com.vidiun.recording.controller.events.PreviewEvent;
+	import com.vidiun.recording.controller.events.RecorderEvent;
+	import com.vidiun.recording.view.VRecordViewParams;
+	import com.vidiun.recording.view.UIComponent;
+	import com.vidiun.recording.view.View;
+	import com.vidiun.recording.view.ViewEvent;
+	import com.vidiun.recording.view.ViewState;
+	import com.vidiun.recording.view.ViewStatePreview;
+	import com.vidiun.utils.VConfigUtil;
+	import com.vidiun.utils.VUtils;
+	import com.vidiun.utils.ObjectHelpers;
+	import com.vidiun.vo.VidiunMediaEntry;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -70,7 +70,7 @@ package {
 	[SWF(width = '320', height = '240', frameRate = '30', backgroundColor = '#000000')]
 	[Frame(factoryClass = "ApplicationLoader")]
 
-	public class KRecord extends Sprite {
+	public class VRecord extends Sprite {
 		
 		/**
 		 * parameters passed from a wrapper application, fixed to lower-no-underscore.
@@ -82,7 +82,7 @@ package {
 		 */
 		private var _mostRecentEntryId:String;
 
-		private var _recordControl:KRecordControl = new KRecordControl();
+		private var _recordControl:VRecordControl = new VRecordControl();
 
 		private var _message:TextField;
 
@@ -115,7 +115,7 @@ package {
 		 * @param init		if true will automatically call startApplication and initialize application.
 		 *
 		 */
-		public function KRecord(init:Boolean = true):void {
+		public function VRecord(init:Boolean = true):void {
 			Global.RECORD_CONTROL = _recordControl;
 			addEventListener(Event.ADDED_TO_STAGE, build);
 		}
@@ -126,7 +126,7 @@ package {
 
 			var customContextMenu:ContextMenu = new ContextMenu();
 			customContextMenu.hideBuiltInItems();
-			var menuItem:ContextMenuItem = new ContextMenuItem("Krecord " + VERSION, true);
+			var menuItem:ContextMenuItem = new ContextMenuItem("Vrecord " + VERSION, true);
 			customContextMenu.customItems.push(menuItem);
 			this.contextMenu = customContextMenu;
 
@@ -143,26 +143,26 @@ package {
 				_showErrorMessage = true
 			}
 			// view params:
-			var themeUrl:String = KConfigUtil.getDefaultValue(pushParameters.themeurl, "skin.swf");
-			var localeUrl:String = KConfigUtil.getDefaultValue(pushParameters.localeurl, "locale.xml");
-			var autoPreview:String = KConfigUtil.getDefaultValue(pushParameters.autopreview, "1");
+			var themeUrl:String = VConfigUtil.getDefaultValue(pushParameters.themeurl, "skin.swf");
+			var localeUrl:String = VConfigUtil.getDefaultValue(pushParameters.localeurl, "locale.xml");
+			var autoPreview:String = VConfigUtil.getDefaultValue(pushParameters.autopreview, "1");
 			if (pushParameters.showpreviewtimer == "true" || pushParameters.showpreviewtimer == "1")
 				Global.SHOW_PREVIEW_TIMER = true;
 			
 			Global.REMOVE_PLAYER = (pushParameters.removeplayer == "1" || pushParameters.removeplayer == "true");
-			Global.VIEW_PARAMS = new KRecordViewParams(themeUrl, localeUrl, autoPreview);
+			Global.VIEW_PARAMS = new VRecordViewParams(themeUrl, localeUrl, autoPreview);
 			Global.DETECTION_DELAY = pushParameters.hasOwnProperty("detectiondelay") ? uint(pushParameters.detectiondelay) : 0;
 			Global.DISABLE_GLOBAL_CLICK = (pushParameters.disableglobalclick == "1" || pushParameters.disableglobalclick == "true");
 			
 			Global.DEBUG_MODE = pushParameters.hasOwnProperty("debugmode") ? true : false;
 
-			// create Kaltura client 
-			var configuration:KalturaConfig = new KalturaConfig();
+			// create Vidiun client 
+			var configuration:VidiunConfig = new VidiunConfig();
 			configuration.partnerId = pushParameters.pid;
 			configuration.ignoreNull = 1;
-			configuration.domain = KUtils.hostFromCode(pushParameters.host);
+			configuration.domain = VUtils.hostFromCode(pushParameters.host);
 			configuration.srvUrl = "api_v3/index.php"
-			configuration.ks = pushParameters.ks;
+			configuration.vs = pushParameters.vs;
 
 			if (!pushParameters.httpprotocol) {
 				var url:String = root.loaderInfo.url;
@@ -173,7 +173,7 @@ package {
 			}
 			configuration.protocol += "://";
 
-			Global.KALTURA_CLIENT = new KalturaClient(configuration);
+			Global.VIDIUN_CLIENT = new VidiunClient(configuration);
 
 			
 			_view.addEventListener(ViewEvent.VIEW_READY, startApplication);
@@ -200,8 +200,8 @@ package {
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-			_messageX = KConfigUtil.getDefaultValue(pushParameters.messagex, 0);
-			_messageY = KConfigUtil.getDefaultValue(pushParameters.messagey, 0);
+			_messageX = VConfigUtil.getDefaultValue(pushParameters.messagex, 0);
+			_messageY = VConfigUtil.getDefaultValue(pushParameters.messagey, 0);
 			
 			// Register External Interface calls
 			if (ExternalInterface.available) {
@@ -231,18 +231,18 @@ package {
 					ExternalInterface.marshallExceptions = true;
 					notify("swfReady");
 					if (Global.DEBUG_MODE)
-						trace('KRecord: JS functions registered to wrapper.\n' + 'objectId - ' + ExternalInterface.objectID);
+						trace('VRecord: JS functions registered to wrapper.\n' + 'objectId - ' + ExternalInterface.objectID);
 				}
 				catch (err:Error) {
-					trace('KRecord: Error initializing KRecord via JS: ', err.message);
+					trace('VRecord: Error initializing VRecord via JS: ', err.message);
 				}
 			}
 			
 			// read flashVars for recorder params
-			_limitRecord = KConfigUtil.getDefaultValue(pushParameters.limitrecord, 0);
-			var hostUrl:String = KConfigUtil.getDefaultValue(pushParameters.host, "http://www.kaltura.com");
-			var rtmpHost:String = KConfigUtil.getDefaultValue(pushParameters.rtmphost, "rtmp://www.kaltura.com");
-			var fmsApp:String = KConfigUtil.getDefaultValue(pushParameters.fmsapp, "oflaDemo");
+			_limitRecord = VConfigUtil.getDefaultValue(pushParameters.limitrecord, 0);
+			var hostUrl:String = VConfigUtil.getDefaultValue(pushParameters.host, "http://www.vidiun.com");
+			var rtmpHost:String = VConfigUtil.getDefaultValue(pushParameters.rtmphost, "rtmp://www.vidiun.com");
+			var fmsApp:String = VConfigUtil.getDefaultValue(pushParameters.fmsapp, "oflaDemo");
 			var isLive:Boolean = pushParameters.hasOwnProperty("islive") ? (pushParameters.islive == "1" || pushParameters.islive == "true") : false;
 			var streamName:String = pushParameters.hasOwnProperty("streamname") ? pushParameters.streamname : '';
 			_recordControl.initRecorderParameters = new BaseRecorderParams(hostUrl, rtmpHost, fmsApp, isLive, streamName);
@@ -316,7 +316,7 @@ package {
 			
 			var skipDeviceDetection:Boolean = pushParameters.hasOwnProperty("skipdetection") ? (pushParameters.skipdetection == "true") : false;
 			if (Global.DEBUG_MODE)
-				trace("KRecord: call deviceDetection. skip detection: ", skipDeviceDetection);
+				trace("VRecord: call deviceDetection. skip detection: ", skipDeviceDetection);
 			
 			_recordControl.deviceDetection(skipDeviceDetection);
 			
@@ -347,7 +347,7 @@ package {
 		 */
 		private function onRecordTimeComplete(evt:TimerEvent):void {
 			if (Global.DEBUG_MODE) 
-				trace("KRecord: AUTO STOP AFTER ", _limitRecord, " SECONDS")
+				trace("VRecord: AUTO STOP AFTER ", _limitRecord, " SECONDS")
 			stopRecording();
 			notify("autoStopRecord", _limitRecord);
 		}
@@ -383,23 +383,23 @@ package {
 		private function onSave(evt:ViewEvent):void {
 			_recordControl.stopPreviewRecording();
 			// get entry flashvars:
-			var entryName:String = KConfigUtil.getDefaultValue(pushParameters.entryname, "");
-			var entryTags:String = KConfigUtil.getDefaultValue(pushParameters.entrytags, "");
-			var entryDescription:String = KConfigUtil.getDefaultValue(pushParameters.entrydescription, "");
-			var creditsScreenName:String = KConfigUtil.getDefaultValue(pushParameters.creditsscreenname, "");
-			var creditsSiteUrl:String = KConfigUtil.getDefaultValue(pushParameters.creditssiteurl, "");
-			var categories:String = KConfigUtil.getDefaultValue(pushParameters.categories, "");
-			var adminTags:String = KConfigUtil.getDefaultValue(pushParameters.admintags, "");
-			var licenseType:String = KConfigUtil.getDefaultValue(pushParameters.licensetype, "");
-			var credit:String = KConfigUtil.getDefaultValue(pushParameters.credit, "");
-			var groupId:String = KConfigUtil.getDefaultValue(pushParameters.groupid, "");
-			var partnerData:String = KConfigUtil.getDefaultValue(pushParameters.partnerdata, "");
-			var conversionQuality:String = KConfigUtil.getDefaultValue(pushParameters.conversionquality, "");
+			var entryName:String = VConfigUtil.getDefaultValue(pushParameters.entryname, "");
+			var entryTags:String = VConfigUtil.getDefaultValue(pushParameters.entrytags, "");
+			var entryDescription:String = VConfigUtil.getDefaultValue(pushParameters.entrydescription, "");
+			var creditsScreenName:String = VConfigUtil.getDefaultValue(pushParameters.creditsscreenname, "");
+			var creditsSiteUrl:String = VConfigUtil.getDefaultValue(pushParameters.creditssiteurl, "");
+			var categories:String = VConfigUtil.getDefaultValue(pushParameters.categories, "");
+			var adminTags:String = VConfigUtil.getDefaultValue(pushParameters.admintags, "");
+			var licenseType:String = VConfigUtil.getDefaultValue(pushParameters.licensetype, "");
+			var credit:String = VConfigUtil.getDefaultValue(pushParameters.credit, "");
+			var groupId:String = VConfigUtil.getDefaultValue(pushParameters.groupid, "");
+			var partnerData:String = VConfigUtil.getDefaultValue(pushParameters.partnerdata, "");
+			var conversionQuality:String = VConfigUtil.getDefaultValue(pushParameters.conversionquality, "");
 
 			addEntry(entryName, entryTags, entryDescription, creditsScreenName, creditsSiteUrl, categories, adminTags, licenseType, credit, groupId, partnerData, conversionQuality)
 			
 			if (Global.DEBUG_MODE)
-				trace("KRecord: SAVE");
+				trace("VRecord: SAVE");
 		}
 
 
@@ -413,7 +413,7 @@ package {
 		private function previewEventsHandler(event:Event):void
 		{
 			if (Global.DEBUG_MODE)
-				trace('KRecord previewEventsHandler: ' + event.type);
+				trace('VRecord previewEventsHandler: ' + event.type);
 			
 			if (event.type == RecordNetStreamEvent.NETSTREAM_PLAY_COMPLETE) {
 				notify("previewEnd");
@@ -559,7 +559,7 @@ package {
 				ExternalInterface.call("eval(window.delegator)", methodName, args);
 			}
 			catch (error:Error) {
-				trace("KRecord delegator: " + error.message);
+				trace("VRecord delegator: " + error.message);
 			}
 		}
 
@@ -573,11 +573,11 @@ package {
 			delegator(methodName, args);
 			try {
 				// trigger EI methods on the delegate object
-				var delegate:String = KConfigUtil.getDefaultValue(pushParameters.delegate, "window");
+				var delegate:String = VConfigUtil.getDefaultValue(pushParameters.delegate, "window");
 				ExternalInterface.call("eval(" + delegate + "." + methodName + ")", args);
 			}
 			catch (err:Error) {
-				trace("KRecord notify: ", err.message);
+				trace("VRecord notify: ", err.message);
 			}
 			// print message on screen
 			if (_showErrorMessage)  {  
@@ -696,7 +696,7 @@ package {
 
 		private function netConnectionEventsHandler(event:ExNetConnectionEvent):void {
 			if (Global.DEBUG_MODE)
-				trace('KRecord netConnectionEventsHandler: ', event.type);
+				trace('VRecord netConnectionEventsHandler: ', event.type);
 			var delegateMethod:String;
 			switch (event.type) {
 				case ExNetConnectionEvent.NETCONNECTION_CONNECT_SUCCESS:
@@ -790,7 +790,7 @@ package {
 
 		private function flushHandler(event:FlushStreamEvent):void {
 			if (Global.DEBUG_MODE)
-				trace("KRecord ", event.type + "  :   " + event.bufferSize + " / " + event.totalBuffer);
+				trace("VRecord ", event.type + "  :   " + event.bufferSize + " / " + event.totalBuffer);
 			
 			notify("flushComplete");
 			dispatchEvent(event.clone());
@@ -838,7 +838,7 @@ package {
 
 
 		/**
-		 * add the last recording as a new Kaltura entry in the Kaltura Network.
+		 * add the last recording as a new Vidiun entry in the Vidiun Network.
 		 * @param entry_name				the name for the new added entry.
 		 * @param entry_tags				user tags for the newly created entry.
 		 * @param entry_description			description of the newly created entry.
@@ -855,7 +855,7 @@ package {
 		public function addEntry(entry_name:String = '', entry_tags:String = '', entry_description:String = '', credits_screen_name:String = '', credits_site_url:String = '', categories:String = "", admin_tags:String = '',
 			license_type:String = '', credit:String = '', group_id:String = '', partner_data:String = '', conversionQuality:String = ''):void {
 			if (entry_name == '')
-				entry_name = 'recorded_entry_pid' + Global.KALTURA_CLIENT.partnerId + '_' + (Math.floor(Math.random() * 1000000)).toString();
+				entry_name = 'recorded_entry_pid' + Global.VIDIUN_CLIENT.partnerId + '_' + (Math.floor(Math.random() * 1000000)).toString();
 
 			notify("beforeAddEntry");
 			_recordControl.addEntry(entry_name, entry_tags, entry_description, credits_screen_name, credits_site_url, categories, admin_tags, license_type, credit, group_id, partner_data, conversionQuality);
@@ -869,19 +869,19 @@ package {
 
 
 		private function addEntryComplete(event:AddEntryEvent):void {
-			var entry:KalturaMediaEntry = event.info as KalturaMediaEntry;
+			var entry:VidiunMediaEntry = event.info as VidiunMediaEntry;
 			if (entry) {
 				_mostRecentEntryId = entry.id;
 				notify("addEntryComplete", entry);
 				
 				if (Global.DEBUG_MODE)
-					trace("KRecord: Your new entry is: " + entry.entryId + "\nthumb: " + entry.thumbnailUrl);
+					trace("VRecord: Your new entry is: " + entry.entryId + "\nthumb: " + entry.thumbnailUrl);
 			}
 			else {
 				notify("addEntryFailed", event.info);
 				
 				if (Global.DEBUG_MODE)
-					trace('KRecord: ', ObjectUtil.toString(event.info));
+					trace('VRecord: ', ObjectUtil.toString(event.info));
 			}
 			dispatchEvent(event.clone());
 		}

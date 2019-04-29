@@ -1,5 +1,5 @@
 // TODO: cancel popup message as state and add it as a feature in ViewState
-package com.kaltura.recording.view
+package com.vidiun.recording.view
 {
 	
 

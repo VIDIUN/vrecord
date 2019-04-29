@@ -6,7 +6,7 @@
  * @author Dani X Bacon <( Oink )
  * @version 0.2
  */
-package com.kaltura.utils {
+package com.vidiun.utils {
 	
 	import flash.utils.Dictionary;
 	

@@ -5,11 +5,11 @@
 //                          | ' </ _` | |  _| || | '_/ _` |
 //                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 //
-// This file is part of the Kaltura Collaborative Media Suite which allows users
+// This file is part of the Vidiun Collaborative Media Suite which allows users
 // to do with audio, video, and animation what Wiki platfroms allow them to do with
 // text.
 //
-// Copyright (C) 2006-2008  Kaltura Inc.
+// Copyright (C) 2006-2008  Vidiun Inc.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@
 // @ignore
 // ===================================================================================================
 */
-package com.kaltura.devicedetection {
+package com.vidiun.devicedetection {
 	import flash.display.BitmapData;
 	import flash.events.EventDispatcher;
 	import flash.events.StatusEvent;
@@ -47,33 +47,33 @@ package com.kaltura.devicedetection {
 
 	/**
 	 *  dispatched to notify an active microphone device was detetceted.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.DETECTED_MICROPHONE
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.DETECTED_MICROPHONE
 	 */
-	[Event(name = "detectedMicrophone", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "detectedMicrophone", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 	
 	/**
 	 *  dispatched to notify an error of detecting an active microphone.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.ERROR_MICROPHONE
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.ERROR_MICROPHONE
 	 */
-	[Event(name = "errorMicrophone", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "errorMicrophone", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 	
 	/**
 	 *  dispatched to notify an active camera device was detected.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.DETECTED_CAMERA
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.DETECTED_CAMERA
 	 */
-	[Event(name = "detectedCamera", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "detectedCamera", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 	
 	/**
 	 *  dispatched to notify an error of detecting an active camera.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.ERROR_CAMERA
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.ERROR_CAMERA
 	 */
-	[Event(name = "errorCamera", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "errorCamera", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 	
 	/**
 	 *  dispatched to notify access to cameras is denied by user.
-	 *  @eventType com.kaltura.devicedetection.DeviceDetectionEvent.CAMERA_DENIED
+	 *  @eventType com.vidiun.devicedetection.DeviceDetectionEvent.CAMERA_DENIED
 	 */
-	[Event(name = "cameraDenied", type = "com.kaltura.devicedetection.DeviceDetectionEvent")]
+	[Event(name = "cameraDenied", type = "com.vidiun.devicedetection.DeviceDetectionEvent")]
 
 	public class DeviceDetector extends EventDispatcher {
 		

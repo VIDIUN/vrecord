@@ -39,10 +39,10 @@
 	        var rnd = Math.random();
 	        var initVars = {
 	        	debugmode:"true",
-	        	host:"www.kaltura.com",
-	        	rtmphost:"rtmp://www.kaltura.com:1935",
+	        	host:"www.vidiun.com",
+	        	rtmphost:"rtmp://www.vidiun.com:1935",
 	        	pid:"",
-	        	ks:"",
+	        	vs:"",
 	        	ish264:"true",
 	        	h264profile:"baseline",
 	        	h264level:"3",
@@ -84,8 +84,8 @@
     <body>
     <script>
 		function clickFunction() {
-			var kRecord = document.getElementById("${application}");
-			alert (kRecord.getMicrophoneGain());
+			var vRecord = document.getElementById("${application}");
+			alert (vRecord.getMicrophoneGain());
 		}
 		
 		function addEntryFailed(a) {
@@ -101,10 +101,10 @@
 			//alert("flushComplete");
 		}
 		function setVolume() {
-			var kRecord = document.getElementById("${application}");
+			var vRecord = document.getElementById("${application}");
 			var val =  document.getElementById("volumeLevel").value;
-			alert ("clicked, value: "+val + " " + kRecord);
-			kRecord.setMicrophoneGain(val);
+			alert ("clicked, value: "+val + " " + vRecord);
+			vRecord.setMicrophoneGain(val);
 		}
 		function autoStopRecord(a) {
 			alert('autoStopRecord after '+a+' seconds');
@@ -115,31 +115,31 @@
 		}
 		
 		function startRecording() {
-			var kRecord = document.getElementById("${application}");
-			kRecord.startRecording();
+			var vRecord = document.getElementById("${application}");
+			vRecord.startRecording();
 		}
 		function stopRecording() {
-			var kRecord = document.getElementById("${application}");
-			kRecord.stopRecording();
+			var vRecord = document.getElementById("${application}");
+			vRecord.stopRecording();
 		}
 		
 		function previewRecording(action) {
-			var kRecord = document.getElementById("${application}");
+			var vRecord = document.getElementById("${application}");
 			switch (action) {
 			case 'start':
-				kRecord.previewRecording();
+				vRecord.previewRecording();
 				break;
 				
 			case 'stop':
-				kRecord.stopPreviewRecording();
+				vRecord.stopPreviewRecording();
 				break;
 				
 			case 'pause':
-				kRecord.pausePreview();
+				vRecord.pausePreview();
 				break;
 				
 			case 'resume':
-				kRecord.resumePreview();
+				vRecord.resumePreview();
 				break;
 				
 			}
@@ -154,8 +154,8 @@
 		}
 		
 		function openSettings() {
-			var kRecord = document.getElementById("${application}");
-			kRecord.openSettings();
+			var vRecord = document.getElementById("${application}");
+			vRecord.openSettings();
 		}
 		
 		function delegator(message,args) {
